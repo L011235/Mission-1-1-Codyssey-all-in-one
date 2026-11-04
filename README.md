@@ -269,7 +269,7 @@ $ ls -ld practice      # 변경 전
 $ chmod 750 practice
 $ ls -ld practice      # 변경 후
 ```
-```bash
+```text
 # 1. 디렉터리 권한 변경 (755-->750)
 root@bfe91c61e6ed:/# mkdir practice
 #변경 전
@@ -306,7 +306,7 @@ root@bfe91c61e6ed:/practice# ls -l a.txt
 $ docker --version
 $ docker info
 ```
-```bash
+```text
 User@4F-75 UCRT64 ~
 $ docker --version
 Docker version 29.9.2, build a82e528
