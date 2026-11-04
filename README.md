@@ -423,7 +423,9 @@ Server:
  Live Restore Enabled: false
  Firewall Backend: iptables
 ```
+
 ![Docker Info 결과](images/06_01_docker_info.png)
+
 ---
 
 ## 7. Docker 기본 운영 명령
