@@ -423,7 +423,7 @@ Server:
  Live Restore Enabled: false
  Firewall Backend: iptables
 ```
-
+![Docker Info 결과](./images/06_01_docker_info.png)
 ---
 
 ## 7. Docker 기본 운영 명령
@@ -933,7 +933,7 @@ $
 ## 13. Git 설정 및 GitHub 연동
 ```bash
 $ git config --global user.name "본인이름"
-$ git config --global user.email "me@example.com"   # 공개 저장소면 마스킹 권장
+$ git config --global user.email "abc@example.com"   # 공개 저장소면 마스킹 권장
 $ git config --list
 
 $ git init
