@@ -172,6 +172,8 @@ $ mv b.txt c.txt
 $ cat c.txt
 $ rm c.txt
 ```
+
+
 ```text
 # 1. pwd (현재 위치 확인)
 root@cb89cdd469fc:/# pwd
@@ -219,7 +221,7 @@ root@cb89cdd469fc:/# ls
 bin   dev  home  lib64  mnt  practice  root  sbin  sys  usr
 boot  etc  lib   media  opt  proc      run   srv   tmp  var
 
-# 3. cd (폴더 이동)
+# 4. cd (폴더 이동)
 root@cb89cdd469fc:/# pwd  #현위치 확인
 /
 
@@ -228,13 +230,27 @@ root@cb89cdd469fc:/# cd practice  # 폴더 이동
 root@cb89cdd469fc:/practice# pwd  #현위치 변동 확인
 /practice
 
-# 4. touch (빈 파일 생성)
+```
+
+#### 1~4. pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동) 실행결과
+![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
+
+```text
+
+# 5. touch (빈 파일 생성)
 root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 없음을 확인
 root@cb89cdd469fc:/practice# touch file1.txt file2.txt  #텍스트파일 2개 생성
 root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 2개 생성된 것을 확인
 file1.txt  file2.txt
 
-# 5. echo (문자열 생성)
+```
+
+#### 5. touch(빈파일 생성) 실행결과  
+![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
+
+```text
+
+# 6. echo (문자열 생성)
 # 문자열 Hello Linux 생성 후 file1.txt에 써넣기 
 root@cb89cdd469fc:/practice# echo "Hello Linux" > file1.txt
 # 문자열 backup file 생성 후 file2.txt에 써넣기
@@ -248,6 +264,13 @@ Hello Linux
 root@cb89cdd469fc:/practice# cat file2.txt
 Backup file
 
+```
+
+#### 6. echo(문자열 생성), > (파이프), cat(문자열 출력)
+![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
+
+
+```text
 # 7. cp (복사)
 
 root@cb89cdd469fc:/practice# ls  # 현폴더 목록 확인. text파일 2개.
@@ -265,6 +288,14 @@ Hello Linux
 #복사된 파일 file1_backup.txt이 동일함을 확인
 root@cb89cdd469fc:/practice# cat file1_backup.txt 
 Hello Linux
+
+```
+
+#### 7. cp (파일 복사)
+![리눅스 터미널 명령어](images/04_Linux_Commands_07(echo_cp).png)
+
+
+```text
 
 # 8. mv (파일명 변경)
 # 파일명 변경 후보 file1_backup.txt의 내용 확인
@@ -286,6 +317,13 @@ backup.txt  file1.txt  file2.txt
 root@bfe91c61e6ed:/practice# cat backup.txt 
 Hello Linux
 
+```
+
+#### 8. mv (파일명 변경)
+![리눅스 터미널 명령어](images/04_Linux_Commands_08(mv).png)
+
+```text
+
 
 # 9. rm (파일 삭제)
 root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 3개
@@ -294,13 +332,27 @@ root@bfe91c61e6ed:/practice# rm file2.txt # 파일 하나 삭제
 root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 2개
 backup.txt  file1.txt             
 
+```
+
+#### 9. rm (파일 삭제)
+![리눅스 터미널 명령어](images/04_Linux_Commands_09(rm).png)
+
+
+```text
+
 # 10. cd .. (상위 디렉토리로 이동)
 root@bfe91c61e6ed:/practice# pwd  #현위치 확인. 기준폴더 아래의 practice폴더
 /practice
 root@bfe91c61e6ed:/practice# cd ..  #상위 폴더로 이동
 root@bfe91c61e6ed:/# pwd            #현위치 폴더. 기준폴더로 이동했음을 확인
 /
+```
 
+#### 10. cd .. (상위폴더로 이동)
+![리눅스 터미널 명령어](images/04_Linux_Commands_10(cd).png)
+
+
+```text
 
 # 11. rm -r (폴더 삭제)
 root@bfe91c61e6ed:/# ls  #현폴더 목록확인
@@ -310,27 +362,6 @@ root@bfe91c61e6ed:/# ls  #현폴더 목록확인. pracitce폴더가 없어진 �
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 root@bfe91c61e6ed:/#
 ```
-
-#### 1~4. pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동) 실행결과
-![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
-
-#### 5. touch(빈파일 생성) 실행결과  
-![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
-
-#### 6. echo(문자열 생성), > (파이프), cat(문자열 출력)
-![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
-
-#### 7. cp (파일 복사)
-![리눅스 터미널 명령어](images/04_Linux_Commands_07(echo_cp).png)
-
-#### 8. mv (파일명 변경)
-![리눅스 터미널 명령어](images/04_Linux_Commands_08(mv).png)
-
-#### 9. rm (파일 삭제)
-![리눅스 터미널 명령어](images/04_Linux_Commands_09(rm).png)
-
-#### 10. cd .. (상위폴더로 이동)
-![리눅스 터미널 명령어](images/04_Linux_Commands_10(cd).png)
 
 #### 11. rm -r (파일 있는 폴더도 삭제)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_11(rm_r).png)
