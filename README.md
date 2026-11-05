@@ -787,26 +787,28 @@ d7a7b8974b4a   ubuntu:latest   "/bin/bash"   41 seconds ago   Up 37 seconds     
 # 실행 중인 컨테이너 내부의 Bash 셸로 접속
 docker exec -it my_container bash
 
-# [컨테이너 내부 내부 셸] 내부에서 새로운 파일 생성 (가변성 확인)
+# [컨테이너 내부셸] 내부에서 새로운 파일 생성 (가변성 확인)
 echo "Hello Docker" > /hello.txt
 cat /hello.txt
 
-# [컨테이너 내부 내부 셸] exit 입력하여 호스트(Git Bash)로 복귀
+# [컨테이너 내부셸] exit 입력하여 호스트(Git Bash)로 복귀
 exit
 ```
 ##### 실행결과
 ```text
+# 실행 중인 컨테이너 내부의 Bash 셸로 접속
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker exec -it my_container bash
-root@825f32dddac5:/# echo "Hello Docker" >hello.txt
-root@825f32dddac5:/# cat /hello.txt
-Hello Docker
-root@825f32dddac5:/# exit
-exit
 
-What's next:
-    Try Docker Debug for seamless, persistent debugging tools in any container or image → docker debug my_container
-    Learn more at https://docs.docker.com/go/debug-cli/
+$ docker exec -it my_container bash
+# [컨테이너 내부셸] 내부에서 새로운 파일 생성 (가변성 확인)
+root@ffdeaba3f356:/# echo "Hello Docker" > /Hello.txt
+root@ffdeaba3f356:/# cat /Hello.txt
+root@ffdeaba3f356:/# ls
+Hello.txt  boot  etc   lib    media  opt   root  sbin  sys  usr
+bin        dev   home  lib64  mnt    proc  run   srv   tmp  var
+# [컨테이너 내부셸] exit 입력하여 호스트(Git Bash)로 복귀
+root@ffdeaba3f356:/# exit
+exit
 
 ```
 ##### 스크린샷
@@ -814,6 +816,8 @@ What's next:
 
 #### 8-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
 ```bash
+# 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
+$ export MSYS_NO_PATHCONV=1
 # 동일한 원본 이미지로 새로운 두 번째 컨테이너 실행
 docker run -it --name new_container ubuntu:latest cat /hello.txt
 # ❌ 결과: "No such file or directory" 에러 발생 
@@ -838,6 +842,8 @@ user@DESKTOP-KTF7H73 UCRT64 ~/practice
 
 #### 8-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
 ```bash
+# 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
+$ export MSYS_NO_PATHCONV=1
 # 첫 번째 컨테이너 정지 및 삭제 (Running -> Stopped -> Deleted)
 docker stop my_container
 docker rm my_container
