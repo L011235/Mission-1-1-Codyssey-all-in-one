@@ -724,16 +724,197 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 ### 8-1 Hello Wolrd 스크린샷
-![Docker_exec_-it](images/08_01_run_hello_wolrd.png)
+![Docker_run_hello_world](images/08_01_run_hello_wolrd.png)
 
-### 8-2. attach(docker run) vs. detach(docker exec)
+### 8-2 생명주기에 따른 이미지와 컨테이너의 차이
+#아래 명령어들을 Git Bash에 차례대로 입력하며 정적인 '이미지'와 동적인 '컨테이너'의 차이를 직접 검증할 수 있습니다.
 
-> attach vs exec 차이: (관찰한 내용을 한두 줄로 직접 정리)
+#### 8-2-1. 원본 이미지 준비 및 확인 (정적 상태)
+```bash
+# 공식 우분투(Ubuntu) 이미지 다운로드 (생명주기: Stored)
+docker pull ubuntu:latest
+
+# 다운로드된 이미지 목록 확인 (자체 실행 불가한 템플릿 상태)
+docker images
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker pull ubuntu:latest
+latest: Pulling from library/ubuntu
+f3f25b84a7d7: Pull complete
+edafa32f5d9e: Pull complete
+21594acc2d8b: Download complete
+Digest: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker images
+                                                                               i Info →   U  In Use
+IMAGE           ID             DISK USAGE   CONTENT SIZE   EXTRA
+ubuntu:latest   6a06111c3b0a        163MB         45.9MB
+```
+##### 스크린샷
+![Docker_Image_pull](images/08_02_01_Docker_Image_pull.png)
+
+#### 8-2-2. 컨테이너 생성 및 실행 (실체화 및 상태 변화)
+```bash
+# 이미지를 기반으로 'my_container'라는 이름의 가동 중인 컨테이너 생성
+# (생명주기: Created -> Running)
+docker run -dit --name my_container ubuntu:latest
+
+# 현재 실행 중인 컨테이너 프로세스 상태 확인
+docker ps
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -dit --name my_container ubuntu:latest
+d7a7b8974b4abb6db9264ca28754d303ae2f1466e7e2406400c2f7f5c6c6d7d0
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps
+CONTAINER ID   IMAGE           COMMAND       CREATED          STATUS          PORTS     NAMES
+d7a7b8974b4a   ubuntu:latest   "/bin/bash"   41 seconds ago   Up 37 seconds             my_container
+```
+##### 스크린샷
+![Docker_run_container](images/08_02_02_Docker_run_container.png)
+
+
+#### 8-2-3. 컨테이너 내부 변경 (쓰기 가능한 레이어 검증)
+```bash
+# 실행 중인 컨테이너 내부의 Bash 셸로 접속
+docker exec -it my_container bash
+
+# [컨테이너 내부 내부 셸] 내부에서 새로운 파일 생성 (가변성 확인)
+echo "Hello Docker" > /hello.txt
+cat /hello.txt
+
+# [컨테이너 내부 내부 셸] exit 입력하여 호스트(Git Bash)로 복귀
+exit
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec -it my_container bash
+root@825f32dddac5:/# echo "Hello Docker" >hello.txt
+root@825f32dddac5:/# cat /hello.txt
+Hello Docker
+root@825f32dddac5:/# exit
+exit
+
+What's next:
+    Try Docker Debug for seamless, persistent debugging tools in any container or image → docker debug my_container
+    Learn more at https://docs.docker.com/go/debug-cli/
+
+```
+##### 스크린샷
+![Docker_run_container내부명령](images/08_02_03_Docker_exec_container_internal.png)
+
+#### 8-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
+```bash
+# 동일한 원본 이미지로 새로운 두 번째 컨테이너 실행
+docker run -it --name new_container ubuntu:latest cat /hello.txt
+# ❌ 결과: "No such file or directory" 에러 발생 
+# 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -it --name new_container ubuntu:latest cat /hello.txt
+cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+
+What's next:
+    Debug this container error with Gordon → docker ai "help me fix this container error"
+# 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+
+```
+##### 스크린샷
+![Docker 이미지 불변성](images/08_02_04_Docker_run_container.png)
+
+
+#### 8-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
+```bash
+# 첫 번째 컨테이너 정지 및 삭제 (Running -> Stopped -> Deleted)
+docker stop my_container
+docker rm my_container
+
+# 동일한 이름으로 다시 컨테이너를 만들어 파일이 남아있는지 확인
+docker run -it --name my_container ubuntu:latest cat /hello.txt
+# ❌ 결과: "No such file or directory" 에러 발생
+# 쓰기 가능 레이어에 적힌 데이터는 컨테이너 삭제 시 함께 소멸됨을 증명
+
+
+#### (마무리) 실습 환경 정리
+
+# 검증용으로 재생성된 컨테이너와 4단계의 new_container 모두 삭제
+docker rm my_container new_container
+
+# 원본 이미지까지 삭제하여 완전 초기화
+docker rmi ubuntu:latest
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stop my_container
+my_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rm my_container
+my_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -it --name my_container ubuntu:latest cat /hello.txt
+cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+
+What's next:
+    Debug this container error with Gordon → docker ai "help me fix this container error"
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rm my_container new_container
+my_container
+new_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rmi ubuntu:latest
+Untagged: ubuntu:latest
+Deleted: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+##### 스크린샷
+![Docker 컨테이너 삭제시 데이터 소멸](images/08_02_05_Docker_container_remove_data_delete.png)
+
+
+| 구분 | 이미지 (Image) | 컨테이너 (Container) |
+| :--- | :--- | :--- |
+| **개념 정의** | 애플리케이션 실행에 필요한 모든 파일과 설정이 합쳐진 **읽기 전용(Read-Only) 템플릿** | 이미지를 실행하여 메모리에 올린 **독립된 격리 프로세스** (살아 움직이는 실행 환경) |
+| **1. 빌드 (Build)** | `Dockerfile`을 기반으로 새롭게 생성됨 (정적 상태) | 빌드 단계 없음 (이미 완성된 이미지를 실체화함) |
+| **2. 실행 원리** | `docker run`의 원본 소스 (자체 실행 불가) | 원본 이미지 레이어 위에 **쓰기 가능한 레이어(Writable Layer)**를 얹어 실행 |
+| **3. 변경 가능성** | **불변성(Immutable)**: 수정하려면 새 버전으로 다시 빌드해야 함 | **가변성(Mutable)**: 실행 중 파일 수정이 가능하나, 컨테이너 삭제 시 변경분은 소멸됨 |
+| **4. 생명주기 상태** | 존재함(Stored) / 삭제됨(Deleted) | 생성됨(Created) → 실행 중(Running) → 정지(Stopped) → 삭제(Deleted) |
+| **5. 주요 명령어** | `build`, `push`, `pull`, `rmi`, `images` | `create`, `start`, `stop`, `rm`, `ps` |
+| **비유하자면** | 붕어빵 틀, 건축 설계도, 게임 설치 CD | 실제 붕어빵, 완공된 건물, 실행 중인 게임 프로세스 |
+
+
+
+### 8-3. attach(docker run) vs. detach(docker exec)
+
+> attach vs exec 차이: (관찰한 내용을 한~두 줄로 직접 정리)
 > #### • 포그라운드 방식 (run -it): 컨테이너를 켜면서 메인 프로세스(PID 1)와 내 터미널을 일체화한다. 메인 터미널을 직접 제어하므로 종료 시 컨테이너도 함께 꺼진다.
 > #### 백그라운드 방식 (run -dit 구동 후 exec -it): 컨테이너를 백그라운드로 띄워두고 필요할 때만 별도의 서브 프로세스로 진입한다. 진입 후 exit로 빠져나와도 새로 띄운 프로세스만 죽을 뿐 컨테이너는 안정적으로 유지된다.
 
 
-#### 8-2-1 docker run -it (포그라운드 진입 및 일체화)
+#### 8-3-1 docker run -it (포그라운드 진입 및 일체화)
 ```bash
 #ubuntu 이미지로 test_ubuntu라는 이름의 컨테이너 실행하고 ubuntu 터미널 내에서 리눅스 명령어 입력
 User@4F-16 UCRT64 ~/practice
@@ -765,9 +946,9 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS              
 ```
 
 
-#### 8-2-2. docker exec -it (컨테이너 안의 서브프로세스로 구동)
+#### 8-3-2. docker exec -it (컨테이너 안의 서브프로세스로 구동)
 > #### 백그라운드로 실행 중인 컨테이너에 exec -it로 진입하면, 메인 프로세스(PID 1)와 별개로 새로운 프로세스 단위의 터미널 실행이 가능하다. 따라서 여기서 exit해도 컨테이너가 죽지 않고 진입했던 서브 프로세스만 종료된다
-#### 실행결과
+##### 실행결과
 ```bash
 User@4F-16 UCRT64 ~/practice
 $ docker ps -a   #중지된 컨테이너 중 이름이 test_ubuntu가 존재
@@ -797,7 +978,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NA
 User@4F-16 UCRT64 ~/practice
 $
 ```
-#### 스크린샷
+##### 스크린샷
 ![Docker_exec_-it](images/08_02_02_Docker_exec_it.png)
 ---
 
@@ -984,7 +1165,11 @@ $ curl http://localhost:8080
 <h1>Updated!</h1>
 
 ```
-
+| 상황 | 경로 방식 | 핵심 이유 |
+| :--- | :--- | :--- |
+| **CLI (`docker run`)** | 절대 경로 우선, `$(pwd)` 활용 가능 | 상대 경로는 의도와 다르게 해석되거나 에러를 유발할 수 있음 |
+| **Compose** | 상대 경로 (`./`) 유효 | `docker-compose.yml` 위치 기준 자동 변환 → 협업 및 프로젝트 이식성 극대화 |
+| **컨테이너 내부** | 절대 경로 원칙 | 컨테이너 루트 (`/`)를 기준으로 파일이 마운트될 위치를 명확화해야 함 |
 ---
 
 
