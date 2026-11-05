@@ -13,7 +13,7 @@
 1. [프로젝트 개요](#1-프로젝트-개요)
 2. [실행 환경](#2-실행-환경)
 3. [수행 체크리스트](#3-수행-체크리스트)
-4. [터미널 조작 로그](#4-터미널-조작-로그)
+4. [터미널 조작 명령어](#4-터미널-조작-명령어)
 5. [파일 권한 실습](#5-파일-권한-실습)
 6. [Docker 설치 및 기본 점검](#6-docker-설치-및-기본-점검)
 7. [Docker 기본 운영 명령](#7-docker-기본-운영-명령)
@@ -173,7 +173,7 @@ $ cat c.txt
 $ rm c.txt
 ```
 
-
+### 1~4 출력결과 [pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동)]
 ```text
 # 1. pwd (현재 위치 확인)
 root@cb89cdd469fc:/# pwd
@@ -229,27 +229,25 @@ root@cb89cdd469fc:/# cd practice  # 폴더 이동
 
 root@cb89cdd469fc:/practice# pwd  #현위치 변동 확인
 /practice
-
 ```
 
-#### 1~4. pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동) 실행결과
+### 1~4. 스크린샷 [pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동)]
 ![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
 
+### 5-1. touch(빈파일 생성) 실행 결과
 ```text
-
 # 5. touch (빈 파일 생성)
 root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 없음을 확인
 root@cb89cdd469fc:/practice# touch file1.txt file2.txt  #텍스트파일 2개 생성
 root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 2개 생성된 것을 확인
 file1.txt  file2.txt
-
 ```
 
-#### 5. touch(빈파일 생성) 실행결과  
+### 5-2. touch(빈파일 생성) 스크린샷 
 ![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
 
+### 6-1. echo(문자열 생성), > (파이프), cat(문자열 출력) 실행결과
 ```text
-
 # 6. echo (문자열 생성)
 # 문자열 Hello Linux 생성 후 file1.txt에 써넣기 
 root@cb89cdd469fc:/practice# echo "Hello Linux" > file1.txt
@@ -263,13 +261,12 @@ Hello Linux
 # file2.txt의 내용을 출력
 root@cb89cdd469fc:/practice# cat file2.txt
 Backup file
-
 ```
 
-#### 6. echo(문자열 생성), > (파이프), cat(문자열 출력)
+### 6-2. echo(문자열 생성), > (파이프), cat(문자열 출력) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
 
-
+### 7-1. cp (파일 복사) 실행결과
 ```text
 # 7. cp (복사)
 
@@ -291,12 +288,11 @@ Hello Linux
 
 ```
 
-#### 7. cp (파일 복사)
+### 7-2. cp (파일 복사) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_07(echo_cp).png)
 
-
+### 8-1. mv (파일명 변경) 실행결과
 ```text
-
 # 8. mv (파일명 변경)
 # 파일명 변경 후보 file1_backup.txt의 내용 확인
 root@bfe91c61e6ed:/practice# cat file1_backup.txt
@@ -316,30 +312,26 @@ backup.txt  file1.txt  file2.txt
 #backup.txt의 내용이 file1_backup.txt와 동일함을 확인
 root@bfe91c61e6ed:/practice# cat backup.txt 
 Hello Linux
-
 ```
 
-#### 8. mv (파일명 변경)
+### 8-2. mv (파일명 변경) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_08(mv).png)
 
+### 9-1. rm (파일 삭제) 실행결과
 ```text
-
-
 # 9. rm (파일 삭제)
 root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 3개
 backup.txt  file1.txt  file2.txt
 root@bfe91c61e6ed:/practice# rm file2.txt # 파일 하나 삭제
 root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 2개
 backup.txt  file1.txt             
-
 ```
 
-#### 9. rm (파일 삭제)
+#### 9-2. rm (파일 삭제)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_09(rm).png)
 
-
+### 10-1. cd .. (상위폴더로 이동) 실행결과
 ```text
-
 # 10. cd .. (상위 디렉토리로 이동)
 root@bfe91c61e6ed:/practice# pwd  #현위치 확인. 기준폴더 아래의 practice폴더
 /practice
@@ -348,12 +340,11 @@ root@bfe91c61e6ed:/# pwd            #현위치 폴더. 기준폴더로 이동했
 /
 ```
 
-#### 10. cd .. (상위폴더로 이동)
+### 10-2. cd .. (상위폴더로 이동) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_10(cd).png)
 
-
+### 11-1. rm -r (파일 있는 폴더도 삭제) 실행결과
 ```text
-
 # 11. rm -r (폴더 삭제)
 root@bfe91c61e6ed:/# ls  #현폴더 목록확인
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  practice  proc  root  run  sbin  srv  sys  tmp  usr  var
@@ -363,7 +354,7 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 root@bfe91c61e6ed:/#
 ```
 
-#### 11. rm -r (파일 있는 폴더도 삭제)
+### 11-2. rm -r (파일 있는 폴더도 삭제) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_11(rm_r).png)
 
 ---
