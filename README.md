@@ -1063,8 +1063,8 @@ CMD ["nginx", "-g", "daemon off;"]
 $ docker build -t my-web:1.0 .
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 ```
-```bash
-# 빌드 결과
+##### 실행결과
+```text
 User@4F-16 UCRT64 ~/practice
 $ docker build -t my-web:1.0 .
 [+] Building 8.2s (9/9) FINISHED                                                       docker:desktop-linux
@@ -1104,6 +1104,7 @@ $ docker build -t my-web:1.0 .
  => => exporting manifest list sha256:0818751b074b7d8744a0161e6fafabf6f3cc7e9b0d00d2d020b3fcfb46c64a1  0.0s
  => => naming to docker.io/library/my-web:1.0                                                          0.0s
  => => unpacking to docker.io/library/my-web:1.0                                                       0.7s
+```
 
 ```bash
 User@4F-16 UCRT64 ~/practice
@@ -1117,7 +1118,7 @@ af369df8d36567a5c9f36800a54d59365d97ec31bb845860b7cb5f967cdb7d22
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
 ```
-```bash
+```text
 User@4F-16 UCRT64 ~/practice
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 e891e89a646871362bd102150881f22bcc18f7a53da0e61cb29710bd3cdcc43f
@@ -1184,6 +1185,9 @@ $ curl http://localhost:8080
 </html>
 
 ```
+##### 스크린샷
+![8080 Curl](images/10_8080curl.png)
+![8080 Curl](images/10_8080p.png)
 
 ---
 
