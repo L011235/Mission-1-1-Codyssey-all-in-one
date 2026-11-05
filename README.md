@@ -71,7 +71,36 @@ exit
 $ winver
 # GUI 창으로 OS 버전 표시 (스크린샷 참고)
 ```
+
+```bash
+if docker info >/dev/null 2>&1; then
+  echo "Docker daemon: active"
+  docker info --format '=== Docker 이미지 및 컨테이너 개수 ===
+Containers: {{.Containers}}
+ Running: {{.ContainersRunning}}
+ Paused: {{.ContainersPaused}}
+ Stopped: {{.ContainersStopped}}
+Images: {{.Images}}'
+else
+  echo "Docker daemon: inactive"
+fi
+```
+
+```text
+Docker daemon: active
+=== Docker 이미지 및 컨테이너 개수 ===
+Containers: 2
+ Running: 1
+ Paused: 0
+ Stopped: 1
+Images: 1
+```
+# 1 Docker 실행환경 체크
 ![실행환경 버전 체크](images/02_01_Version_Check.png)
+
+# 2 Docker info 정보추출
+![docker info 정보추출](images/02_02_Info_Summary.png)
+
 ---
 
 ## 3. 수행 체크리스트
@@ -311,11 +340,11 @@ root@bfe91c61e6ed:/#
 
 ```bash
 $ ls -l a.txt          # 변경 전
-$ chmod 640 a.txt
+$ chmod 640 a.txt      # 보안상 기타 인원의 권한을 없앰
 $ ls -l a.txt          # 변경 후
 
 $ ls -ld practice      # 변경 전
-$ chmod 750 practice
+$ chmod 750 practice   # 보안상 기타 인원의 권한을 없앰
 $ ls -ld practice      # 변경 후
 ```
 ```text
@@ -344,9 +373,14 @@ root@bfe91c61e6ed:/practice# ls -l a.txt
 -rw-r----- 1 root root 0 Oct 31 10:12 a.txt
 
 ```
-> 해석: 변경 전 755 = 소유자 rwx / 그룹 r-x / 기타 r-x, 644 = 소유자 rw- / 그룹·기타 r--
->    : 변경 후 750 = 기타(other)의 권한을 읽기 없앰, 640 = 기타(other)의 권한을 없앰
->      폴더 진입을 위해서는 실행(x)권한이 필요함.(홀수) 일반적으로 폴더 권한은 755, 문서 파일 권한은 644가 디폴트 
+> 해석: 
+  # 변경 전 755 = 소유자 rwx(111(2),7) / 그룹 r-x(101(2).5) / 기타 r-x(101(2),5), 
+  #        644 = 소유자 rw-(110(2),6) / 그룹 r--(100(2),4) / 기타 r--(100(2),4)
+> 변경 이유 :    
+> # 보안상 소유자와 그룹원 이외에 권한을 줄 이유가 없기 때문에 기타(other)의 권한을 읽기 없앰
+> 변경 후: 750, 640, 기타에 해당하는 권한을 0으로 만들어 권한을 없앰. 
+  # 폴더 진입을 위해 eXcute(실행)권한이 필요함.(즉, 홀수) 
+  # 일반적으로 폴더 권한은 755, 문서 파일 권한은 644가 디폴트 
 
 ---
 
