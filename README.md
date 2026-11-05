@@ -682,7 +682,7 @@ CONTAINER ID   NAME                 CPU %     MEM USAGE / LIMIT     MEM %     NE
 
 ---
 
-## 8. 컨테이너 실행 실습
+## 8. 컨테이너 실행 실습 
 ```bash
 $ docker run hello-world
 $ docker run -it ubuntu bash
@@ -690,9 +690,9 @@ $ docker run -it ubuntu bash
 root@xxxx:/# ls
 root@xxxx:/# echo "hello from ubuntu"
 ```
-
-```bash
-# 1. Hello Wolrd 실행 결과
+### 8-1. Hello Wolrd 실행결과
+```text
+# hello-world 이미지를 test_hollo라는 이름의 컨테이너로 실행
 User@4F-75 UCRT64 ~/practice
 $ docker run --name test_hollo hello-world
 Unable to find image 'hello-world:latest' locally
@@ -722,25 +722,28 @@ Share images, automate workflows, and more with a free Docker ID:
 
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
-
-
-# 우분투 실행 및 컨테이너 내 간단명령 실행 결과
-
-
 ```
-> attach vs exec 차이: (관찰한 내용을 한두 줄로 직접 정리)
-# docker run 등으로 컨테이너를 켤 때, 메인 프로세스(PID 1)의 터미널 화면을 내 모니터에 바로 연결(일체화)할지, 백그라운드(detach)로 보낼지 결정할 수 있다.
-# attach는 컨테이너의 메인 프로세스(PID 1)와 내 터미널이 일체화된 상태다. 따라서 attach된 터미널에서 exit로 빠져나오면 메인 프로세스가 죽으면서 컨테이너도 중지된다.
-# docker run -it는 컨테이너의 메인 프로세스(PID 1)와 내 터미널이 일체화된 상태(attach 상태)로 컨테이너를 시작하는 것이다.
+### 8-1 Hello Wolrd 스크린샷
+![Docker_exec_-it](images/08_01_run_hello_wolrd.png)
 
+### 8-2. attach(docker run) vs. detach(docker exec)
+
+> attach vs exec 차이: (관찰한 내용을 한두 줄로 직접 정리)
+> #### • 포그라운드 방식 (run -it): 컨테이너를 켜면서 메인 프로세스(PID 1)와 내 터미널을 일체화한다. 메인 터미널을 직접 제어하므로 종료 시 컨테이너도 함께 꺼진다.
+> #### 백그라운드 방식 (run -dit 구동 후 exec -it): 컨테이너를 백그라운드로 띄워두고 필요할 때만 별도의 서브 프로세스로 진입한다. 진입 후 exit로 빠져나와도 새로 띄운 프로세스만 죽을 뿐 컨테이너는 안정적으로 유지된다.
+
+
+#### 8-2-1 docker run -it (포그라운드 진입 및 일체화)
 ```bash
+#ubuntu 이미지로 test_ubuntu라는 이름의 컨테이너 실행하고 ubuntu 터미널 내에서 리눅스 명령어 입력
 User@4F-16 UCRT64 ~/practice
-$ docker run -it --name test_ubuntu ubuntu bash
-root@1bf29bfb546f:/# ls
+$ docker run -it --name test_ubuntu ubuntu bash  #test_ubuntu를 attach 상태로 실행
+
+root@1bf29bfb546f:/# ls   #목록 확인
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-root@1bf29bfb546f:/# touch a.txt
-root@1bf29bfb546f:/# echo "Hello from ubuntu" > a.txt
-root@1bf29bfb546f:/# cat a.txt
+root@1bf29bfb546f:/# touch a.txt   #a.txt 생성
+root@1bf29bfb546f:/# echo "Hello from ubuntu" > a.txt  #"hello from ubunt"라는 문자열을 생성하여 a.txt에 출력
+root@1bf29bfb546f:/# cat a.txt #a.txt의 문자열을 출력
 Hello from ubuntu
 root@1bf29bfb546f:/# ps
     PID TTY          TIME CMD
@@ -748,20 +751,23 @@ root@1bf29bfb546f:/# ps
      11 pts/0    00:00:00 ps
 root@1bf29bfb546f:/# exit
 exit
-
-User@4F-16 UCRT64 ~/practice  #exit를 실행했을 때 해당 컨테이너가 중지됨
-$ docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+#exit를 실행했을 때 attach 상태로 실행해서 해당 컨테이너가 중지됨
 
 User@4F-16 UCRT64 ~/practice  
+$ docker ps  # 실행중인 컨테이너는 없음
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+User@4F-16 UCRT64 ~/practice  #test_ubuntu 컨테이너가 수초 전에 중지되었음을 확인
 $ docker ps -a
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                       PORTS     NAMES
 1bf29bfb546f   ubuntu    "bash"        About a minute ago   Exited (0) 15 seconds ago              test_ubuntu
 1b9d4f8febb2   ubuntu    "/bin/bash"   8 minutes ago        Exited (137) 3 minutes ago             blissful_fermat
 ```
 
-# detach로 실행 중인 컨테이너에 exec -it로 진입하면, 메인 프로세스(PID 1)와 별개인 새로운 프로세스가 컨테이너 내부에 추가로 생성된다. (따라서 여기서 exit해도 컨테이너가 죽지 않는다.)
 
+#### 8-2-2. docker exec -it (컨테이너 안의 서브프로세스로 구동)
+> #### 백그라운드로 실행 중인 컨테이너에 exec -it로 진입하면, 메인 프로세스(PID 1)와 별개로 새로운 프로세스 단위의 터미널 실행이 가능하다. 따라서 여기서 exit해도 컨테이너가 죽지 않고 진입했던 서브 프로세스만 종료된다
+#### 실행결과
 ```bash
 User@4F-16 UCRT64 ~/practice
 $ docker ps -a   #중지된 컨테이너 중 이름이 test_ubuntu가 존재
@@ -791,7 +797,8 @@ CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NA
 User@4F-16 UCRT64 ~/practice
 $
 ```
-
+#### 스크린샷
+![Docker_exec_-it](images/08_02_02_Docker_exec_it.png)
 ---
 
 ## 9. Dockerfile 커스텀 이미지
