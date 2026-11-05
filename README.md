@@ -83,9 +83,9 @@ $ winver
 - [ ] 1-1. GitHub 저장소 링크로 제출 + 개요/환경/체크리스트/검증방법 포함
 - [ ] 1-2. 구성 → [1. 프로젝트 개요](#1-프로젝트-개요) / [15. 재현성](#15-재현성)
 
-### 2. 터미널 조작 로그 기록
+### 2. 터미널 조작 명령어
 - [ ] 2-1. pwd / ls -la(숨김 포함) / mkdir / cp / mv / 이름변경 / rm / cat / touch 수행
-- [ ] 2-2. 실행결과 → [4. 터미널 조작 로그](#4-터미널-조작-로그)
+- [ ] 2-2. 실행결과 → [4. 터미널 조작 명령어](#4-터미널-조작-명령어)
 
 ### 3. 권한 실습 및 증거 기록
 - [ ] 3-1. 파일 1개 + 디렉터리 1개 권한 변경 전/후 비교
@@ -127,11 +127,12 @@ $ winver
 
 ---
 
-## 4. 터미널 조작 로그
+## 4. 터미널 조작 명령어
 > 작업: 현재 위치 / 목록(숨김 포함) / 폴더 이동 / 폴더 생성 / 파일 복사 / 이동·이름변경 / 삭제 / 내용 확인 / 빈 파일 생성
 
 ```bash
-$ pwd
+#git bash에서 ubuntu 터미널을 띄운 후 입력
+$ pwd    
 $ ls -la
 $ mkdir practice && cd practice
 $ touch a.txt
@@ -140,12 +141,12 @@ $ mv b.txt c.txt
 $ cat c.txt
 $ rm c.txt
 ```
-```bash
+```text
 # 1. pwd (현재 위치 확인)
 root@cb89cdd469fc:/# pwd
 /
 
-# 2. ls -la와 ls (목록(숨김 포함))
+# 2. ls -la (목록(숨김 포함))
 root@cb89cdd469fc:/# ls -la
 total 60
 drwxr-xr-x   1 root root 4096 Oct 31 07:52 .
@@ -175,85 +176,118 @@ boot  etc  lib   media  opt  root  sbin  sys  usr
 
 
 # 3. mkdir (폴더 생성)
-root@cb89cdd469fc:/# ls
+# 현재 폴더 상황 확인 (하위폴더 중 practice 폴더 없음)
+root@cb89cdd469fc:/# ls   
 bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
 boot  etc  lib   media  opt  root  sbin  sys  usr
 
-root@cb89cdd469fc:/# mkdir practice
+root@cb89cdd469fc:/# mkdir practice #폴더 생성
 
-root@cb89cdd469fc:/# ls
+#하위에 practice폴더가 생성된 것을 확인
+root@cb89cdd469fc:/# ls 
 bin   dev  home  lib64  mnt  practice  root  sbin  sys  usr
 boot  etc  lib   media  opt  proc      run   srv   tmp  var
 
 # 3. cd (폴더 이동)
-root@cb89cdd469fc:/# pwd
+root@cb89cdd469fc:/# pwd  #현위치 확인
 /
-root@cb89cdd469fc:/# cd practice
-root@cb89cdd469fc:/practice# pwd
+
+root@cb89cdd469fc:/# cd practice  # 폴더 이동
+
+root@cb89cdd469fc:/practice# pwd  #현위치 변동 확인
 /practice
 
 # 4. touch (빈 파일 생성)
-root@cb89cdd469fc:/practice# ls
-root@cb89cdd469fc:/practice# touch file1.txt file2.txt
-root@cb89cdd469fc:/practice# ls
+root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 없음을 확인
+root@cb89cdd469fc:/practice# touch file1.txt file2.txt  #텍스트파일 2개 생성
+root@cb89cdd469fc:/practice# ls  #현폴더에 파일이 2개 생성된 것을 확인
 file1.txt  file2.txt
 
 # 5. echo (문자열 생성)
+# 문자열 Hello Linux 생성 후 file1.txt에 써넣기 
 root@cb89cdd469fc:/practice# echo "Hello Linux" > file1.txt
+# 문자열 backup file 생성 후 file2.txt에 써넣기
 root@cb89cdd469fc:/practice# echo "Backup file" > file2.txt
 
 # 6. cat (문자열 출력)
+# file1.txt의 내용을 출력 
 root@cb89cdd469fc:/practice# cat file1.txt
 Hello Linux
+# file2.txt의 내용을 출력
 root@cb89cdd469fc:/practice# cat file2.txt
 Backup file
 
 # 7. cp (복사)
-root@cb89cdd469fc:/practice# ls
+
+root@cb89cdd469fc:/practice# ls  # 현폴더 목록 확인. text파일 2개.
 file1.txt  file2.txt
+
+#file1.txt의 내용을 file1_backup.txt에 복사
 root@cb89cdd469fc:/practice# cp file1.txt file1_backup.txt
-root@cb89cdd469fc:/practice# ls
+
+root@cb89cdd469fc:/practice# ls #현폴더 목록 변경 확인. text파일 3개
 file1.txt  file1_backup.txt  file2.txt
-root@cb89cdd469fc:/practice# cat file1.txt
+
+root@cb89cdd469fc:/practice# cat file1.txt #복사 원본 file1.txt의 내용확인
 Hello Linux
-root@cb89cdd469fc:/practice# cat file1_backup.txt
+
+#복사된 파일 file1_backup.txt이 동일함을 확인
+root@cb89cdd469fc:/practice# cat file1_backup.txt 
 Hello Linux
 
 # 8. mv (파일명 변경)
+# 파일명 변경 후보 file1_backup.txt의 내용 확인
 root@bfe91c61e6ed:/practice# cat file1_backup.txt
 Hello Linux
+
+# 현폴더 목록 확인 3개 파일 (file1_backup.txt 포함)
 root@bfe91c61e6ed:/practice# ls
 file1.txt  file1_backup.txt  file2.txt
+
+# file1_backup.txt를 backup.txt로 파일이름 변경
 root@bfe91c61e6ed:/practice# mv file1_backup.txt backup.txt
+
+# 현폴더 목록 변경 확인 (3개 파일 중 file_backup.txt는 없어지고 backup.txt가 생김)
 root@bfe91c61e6ed:/practice# ls
 backup.txt  file1.txt  file2.txt
-root@bfe91c61e6ed:/practice# cat backup.txt
+
+#backup.txt의 내용이 file1_backup.txt와 동일함을 확인
+root@bfe91c61e6ed:/practice# cat backup.txt 
 Hello Linux
 
 
 # 9. rm (파일 삭제)
-root@bfe91c61e6ed:/practice# ls
+root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 3개
 backup.txt  file1.txt  file2.txt
-root@bfe91c61e6ed:/practice# rm file2.txt
-root@bfe91c61e6ed:/practice# ls
-backup.txt  file1.txt
+root@bfe91c61e6ed:/practice# rm file2.txt # 파일 하나 삭제
+root@bfe91c61e6ed:/practice# ls  #현폴더 목록 확인. 텍스트 파일 2개
+backup.txt  file1.txt             
 
 # 10. cd .. (상위 디렉토리로 이동)
-root@bfe91c61e6ed:/practice# pwd
+root@bfe91c61e6ed:/practice# pwd  #현위치 확인. 기준폴더 아래의 practice폴더
 /practice
-root@bfe91c61e6ed:/practice# cd ..
-root@bfe91c61e6ed:/# pwd
+root@bfe91c61e6ed:/practice# cd ..  #상위 폴더로 이동
+root@bfe91c61e6ed:/# pwd            #현위치 폴더. 기준폴더로 이동했음을 확인
 /
 
 
 # 11. rm -r (폴더 삭제)
-root@bfe91c61e6ed:/# ls
+root@bfe91c61e6ed:/# ls  #현폴더 목록확인
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  practice  proc  root  run  sbin  srv  sys  tmp  usr  var
-root@bfe91c61e6ed:/# rm -r practice
-root@bfe91c61e6ed:/# ls
+root@bfe91c61e6ed:/# rm -r practice  #현폴더의 하위폴더 중 하나인 practice폴더를 삭제
+root@bfe91c61e6ed:/# ls  #현폴더 목록확인. pracitce폴더가 없어진 것을 확인
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 root@bfe91c61e6ed:/#
 ```
+
+![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_07(echo_cp).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_08(mv).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_09(rm).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_10(cd).png)
+![리눅스 터미널 명령어](images/04_Linux_Commands_11(rm_r).png)
 
 ---
 
