@@ -42,7 +42,7 @@
 - Docker: version 29.9.2, build a82e528
 - Git: version 2.56.0.windows.4
 
-```bash
+```text
 $ docker --version
 Docker version 29.9.2, build a82e528
 
@@ -71,7 +71,7 @@ exit
 $ winver
 # GUI 창으로 OS 버전 표시 (스크린샷 참고)
 ```
-
+![실행환경 버전 체크](images/02_01_Version_Check.png)
 ---
 
 ## 3. 수행 체크리스트
