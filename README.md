@@ -280,13 +280,28 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 root@bfe91c61e6ed:/#
 ```
 
+# 1~4. pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동) 실행결과
 ![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
+
+# 5. touch(빈파일 생성) 실행결과  
 ![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
+
+# 6. echo(문자열 생성), > (파이프), cat(문자열 출력)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
+
+# 7. cp (파일 복사)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_07(echo_cp).png)
+
+# 8. mv (파일명 변경)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_08(mv).png)
+
+# 9. rm (파일 삭제)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_09(rm).png)
+
+# 10. cd .. (상위폴더로 이동)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_10(cd).png)
+
+# 11. rm -r (파일 있는 폴더도 삭제)
 ![리눅스 터미널 명령어](images/04_Linux_Commands_11(rm_r).png)
 
 ---
