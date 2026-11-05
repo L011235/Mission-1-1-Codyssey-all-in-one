@@ -817,7 +817,7 @@ exit
 #### 8-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
 ```bash
 # 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
-$ export MSYS_NO_PATHCONV=1
+export MSYS_NO_PATHCONV=1
 # 동일한 원본 이미지로 새로운 두 번째 컨테이너 실행
 docker run -it --name new_container ubuntu:latest cat /hello.txt
 # ❌ 결과: "No such file or directory" 에러 발생 
@@ -826,18 +826,17 @@ docker run -it --name new_container ubuntu:latest cat /hello.txt
 ##### 실행결과
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -it --name new_container ubuntu:latest cat /hello.txt
-cat: 'C:/Program Files/Git/hello.txt': No such file or directory
-
-What's next:
-    Debug this container error with Gordon → docker ai "help me fix this container error"
-# 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
+$ export MSYS_NO_PATHCONV=1
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -it --name new_container ubuntu:latest cat /hello.txt
+cat: /hello.txt: No such file or directory
+# 위 에러 문구가 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
+
 
 ```
 ##### 스크린샷
-![Docker 이미지 불변성](images/08_02_04_Docker_run_container.png)
+![Docker 이미지 불변성](images/08_02_04_Docker_run_new_container.png)
 
 
 #### 8-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
@@ -865,6 +864,9 @@ docker rmi ubuntu:latest
 ##### 실행결과
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ docker stop my_container
 my_container
 
@@ -873,21 +875,66 @@ $ docker rm my_container
 my_container
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -it --name my_container ubuntu:latest cat /hello.txt
-cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+$ docker run -it --name new_container ubuntu:latest cat /Hello.txt
+cat: /Hello.txt: No such file or directory
 
-What's next:
-    Debug this container error with Gordon → docker ai "help me fix this container error"
+```
+##### 스크린샷
+![Docker 컨테이너 삭제시 데이터 소멸](images/08_02_05_Docker_container_remove_data_delete.png)
+
+#### 2-2-6 재시작한 컨테이너의 보존성
+```bash
+$ export MSYS_NO_PATHCONV=1  # docker가 디렉토리 경로를 임의로 바꾸지 못하게 한다.
+$ docker run -dit --name reactivated_container ubuntu:latest  # 우분투 이미지를 백그라운드로 실행
+$ docker exec -it reactivated_container echo "hello again" > /again.txt  #컨테이너 내부 루트폴더에 again.txt 생성
+$ docker exec -it reactivated_container cat /again.txt                   #컨테이너 내부 파일 안의 문자를 읽어서 출력
+$ docker stop reactivated_container                                      #컨테이너를 중지시킨다.
+$ docker start reactivated_container                                     #그 컨테이너를 재시작한다.
+$ docker exec -it cat /again.txt                                         #중지되기 전에 존재했던 파일에 대해서 읽기 시도를 한다.
+```
+
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker rm my_container new_container
-my_container
-new_container
+$ docker run -dit --name reactivated_container ubuntu:latest
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+f3f25b84a7d7: Pull complete
+edafa32f5d9e: Pull complete
+21594acc2d8b: Download complete
+Digest: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+Status: Downloaded newer image for ubuntu:latest
+08c0132e410e688afbab25cc09c47eeeaba959ffe299b9ab3a2d2a93c4337e74
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker rmi ubuntu:latest
-Untagged: ubuntu:latest
-Deleted: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+$ docker exec reactivated_container sh -c 'echo "hello again" > /again.txt'
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec reactivated_container cat /again.txt
+hello again
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stop reactivated_container
+reactivated_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker start reactivated_container
+reactivated_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec reactivated_container cat /again.txt
+hello again
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stop reactivated_container
+reactivated_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rm reactivated_container
+reactivated_container
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ docker ps
@@ -897,8 +944,9 @@ user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ docker ps -a
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
+
 ##### 스크린샷
-![Docker 컨테이너 삭제시 데이터 소멸](images/08_02_05_Docker_container_remove_data_delete.png)
+![Docker 컨테이너 중지후 재시작시 보존](images/08_02_06_Docker_container_stop_start_conservation.png)
 
 
 | 구분 | 이미지 (Image) | 컨테이너 (Container) |
