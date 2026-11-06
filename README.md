@@ -266,7 +266,7 @@ Server:
 
 ### 4. Docker 설치 및 기본 점검
 - [ ] 4-1. docker --version / docker info(또는 동등 점검) 확인
-- [ ] 4-2. Docker 설치 및 점검 → [2. 실행 환경]((#2-실행-환경))
+- [ ] 4-2. Docker 설치 및 점검 → [2. 실행 환경](#2-실행-환경)
 
 ### 5. Docker 기본 운영 명령 수행
 - [ ] 5-1. docker images / ps / ps -a / logs / stats 실행
@@ -315,7 +315,7 @@ $ cat c.txt
 $ rm c.txt
 ```
 
-### 1~4 출력결과 [pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동)]
+### 1~4 출력결과 [pwd(위치확인), ls(목록 확인), ls -1a, mkdir(폴더생성), cd(폴더이동)]
 ```text
 # 1. pwd (현재 위치 확인)
 root@cb89cdd469fc:/# pwd
@@ -405,7 +405,7 @@ root@cb89cdd469fc:/practice# cat file2.txt
 Backup file
 ```
 
-### 6-2. echo(문자열 생성), > (파이프), cat(문자열 출력) 스크린샷
+### 6-2. echo(문자열 생성), > (출력 리다이렉션), cat(문자열 출력) 스크린샷
 ![리눅스 터미널 명령어](images/04_Linux_Commands_06(echo_cat).png)
 
 ### 7-1. cp (파일 복사) 실행결과
