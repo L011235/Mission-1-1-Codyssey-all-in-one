@@ -16,8 +16,8 @@
 6. [Docker 설치 및 기본 점검](#6-docker-설치-및-기본-점검)
 7. [Docker 기본 운영 명령](#7-docker-기본-운영-명령)
 8. [컨테이너 실행 실습](#8-컨테이너-실행-실습)
-9. [Dockerfile 커스텀 이미지](#9-dockerfile-커스텀-이미지)
-10. [포트 매핑 접속 증거](#10-포트-매핑-접속-증거)
+9. [Dockerfile 커스텀 이미지](#8-Dockerfile-커스텀-이미지)
+10. [포트 매핑 접속 증거](#9-포트-매핑-접속-증거)
 11. [바인드 마운트 반영](#11-바인드-마운트-반영)
 12. [볼륨 영속성 검증](#12-볼륨-영속성-검증)
 13. [Git 설정 및 GitHub 연동](#13-git-설정-및-github-연동)
@@ -1194,7 +1194,7 @@ $
 ![Docker_exec_-it](images/08_02_02_Docker_exec_it.png)
 ---
 
-## 9. Dockerfile 커스텀 이미지
+## 8. Dockerfile 커스텀 이미지
 > **실습 유형: 웹서버 기반 (Nginx)**
 >
 > **커스텀 목적:** Nginx 기본 이미지를 바탕으로 사용자 정의 웹 페이지를 제공하는 커스텀 이미지 제작
@@ -1277,8 +1277,8 @@ my-web-8080
 
 ---
 
-## 10. 포트 매핑 접속 증거
-### 10-1. 네트워크 네임스페이스와 포트 매핑 원리
+## 9. 포트 매핑 접속 증거
+### 9-1. 네트워크 네임스페이스와 포트 매핑 원리
 
 #### ① 네트워크 네임스페이스(Network Namespace)
 
@@ -1337,15 +1337,15 @@ Nginx 웹서버 (80번 포트)
 
 `EXPOSE`만으로는 호스트에서 컨테이너에 접속할 수 있도록 포트가 자동으로 게시되지 않는다.
 
-  ### 10-2. 포트 매핑 실행 및 접속 확인
-  >9절 실습에서 컨테이너 `my-web-8080`을 삭제했으므로, 10절에서도 8080 포트를 사용할 수 있다.
+  ### 9-2. 포트 매핑 실행 및 접속 확인
+  >8절 실습에서 컨테이너 `my-web-8080`을 삭제했으므로, 9절에서도 8080 포트를 사용할 수 있다.
 ```bash
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
 $ docker rm -f my-web-8080
 ```
 
-### 10-3. 실행 결과 및 검증
+### 9-3. 실행 결과 및 검증
 ##### 실행 결과
 ```text
 User@4F-16 UCRT64 ~/practice
@@ -1422,11 +1422,11 @@ my-web-8080
 ![8080 Curl](images/10_8080p.png)
 
 ---
-## 11. 바인드 마운트 반영
+## 10. 바인드 마운트 반영
 
 >호스트 파일 변경 → 컨테이너 내부 반영 전/후 비교
 
-### 11-1. 바인드 마운트 실행 및 호스트 파일 연결
+### 10-1. 바인드 마운트 실행 및 호스트 파일 연결
 ```bash
 #### Git Bash의 자동 경로 변환 방지
 export MSYS_NO_PATHCONV=1
@@ -1448,7 +1448,7 @@ $(pwd -W)/site: Windows 호스트의 site 폴더
 /usr/share/nginx/html: 컨테이너 내부 Nginx 웹페이지 폴더
 ```
 
-### 11-2. 호스트 파일 변경 전후 비교
+### 10-2. 호스트 파일 변경 전후 비교
 ```bash
 #### 변경 전: 호스트의 index.html 내용을 컨테이너 웹서버에서 확인
 curl http://localhost:8080
@@ -1460,7 +1460,7 @@ echo "<h1>Updated!</h1>" > site/index.html
 curl http://localhost:8080
 ```
 
-### 11-3. 실행 결과
+### 10-3. 실행 결과
 ```bash
 User@4F-16 UCRT64 ~/practice
 $ mkdir site
@@ -1515,7 +1515,7 @@ User@4F-16 UCRT64 ~/practice
 $ docker rm -f bind-test
 bind-test
 ```
-### 11-4. 호스트와 컨테이너의 경로 선택 기준
+### 10-4. 호스트와 컨테이너의 경로 선택 기준
 | 상황 | 경로 방식 | 핵심 이유 |
 | :--- | :--- | :--- |
 | **CLI (`docker run`)** | 절대 경로 우선, `$(pwd)` 활용 가능 | 상대 경로는 의도와 다르게 해석되거나 에러를 유발할 수 있음 |
@@ -1527,17 +1527,17 @@ bind-test
 
 
 
-## 12. 볼륨 영속성 검증
+## 11. 볼륨 영속성 검증
 
 > 볼륨 생성 및 컨테이너 연결 → 데이터 저장 → 컨테이너 삭제 → 데이터 유지 확인
 
-### 12-1. 실습 목적
+### 11-1. 실습 목적
 
 - Docker 볼륨(mydata)을 생성하고 컨테이너의 `/data`에 연결
 - 컨테이너 내부에 파일 작성 및 내용 확인
 - 컨테이너 삭제 후에도 볼륨 데이터가 유지되는지 검증
 
-### 12-2. 명령어 및 실행 결과
+### 11-2. 명령어 및 실행 결과
 
 ```text
 User@DESKTOP-V6OTICP UCRT64 ~/practice
@@ -1590,7 +1590,7 @@ $ docker run --rm -v mydata:/data alpine cat /data/test.txt
 persist me
 ```
 
-### 12-3. 실행 결과 해석
+### 11-3. 실행 결과 해석
 
 - 볼륨 생성: `mydata` 생성 완료
 - 데이터 저장: 컨테이너 내부 `/data/test.txt`에 `persist me` 기록
@@ -1604,7 +1604,7 @@ persist me
 - `docker run --rm`은 데이터 확인용 임시 컨테이너를 종료 후 자동 삭제함.
 - `MSYS_NO_PATHCONV=1`은 UCRT64/Git Bash의 경로 자동 변환을 방지하기 위한 설정임.
 
-### 12-4. 실행 증거
+### 11-4. 실행 증거
 
 ![볼륨 생성 및 데이터 저장/컨테이너 삭제후 볼륨 데이터 보존](images/12_01_volume_conservation_after_deleting_container.png)
 
@@ -1612,7 +1612,7 @@ persist me
 
 ---
 
-## 13. Git설정 및 GitHub연동
+## 12. Git설정 및 GitHub연동
 ```bash
 $ git config --global user.name "본인이름"
 $ git config --global user.email "abc@example.com"   # 공개 저장소면 마스킹 권장
@@ -1702,7 +1702,7 @@ branch 'main' set up to track 'origin/main'.
 
 ---
 
-## 14. 트러블슈팅
+## 13. 트러블슈팅
 > 최소 2건 이상. 형식: 문제 → 원인 가설 → 확인 방법 → 해결
 
 ### 사례 1. (예: 포트 충돌로 컨테이너 실행 실패)
@@ -1721,7 +1721,7 @@ branch 'main' set up to track 'origin/main'.
 
 ---
 
-## 15. 재현성
+## 14. 재현성
 - 다른 환경에서도 동일 결과를 얻을 수 있도록 전제 조건을 명시한다.
 - **개인 PC에 종속된 경로/값이 있으면 대체 방법을 함께 기록한다.**
 
@@ -1740,7 +1740,7 @@ branch 'main' set up to track 'origin/main'.
 
 ---
 
-## 16. 보안 및 개인정보 보호
+## 15. 보안 및 개인정보 보호
 - 제출물 전체에서 다음을 **마스킹**했음을 확인한다.
   - [ ] GitHub 토큰 / Personal Access Token → `ghp_****`
   - [ ] 이메일 → `me@****.com` (필요 시)
