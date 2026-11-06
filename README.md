@@ -1302,7 +1302,7 @@ $ git config --list
 $ git init
 $ git remote add origin https://github.com/<user>/<repo>.git
 $ git add .
-$ git commit -m "feat:  과제 수행 "
+$ git commit -m "feat:  과제수행 "
 $ git push -u origin main
 ```
 ```
