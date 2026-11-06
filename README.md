@@ -1,5 +1,3 @@
-아래 전체(1~16절)를 통째로 드립니다. 코드 블록 안을 **전부 복사 → `README.md`로 저장**하면 됩니다.
-
 
 # 과제 1-1 — 리눅스 커널 기반 개발 워크스테이션 구축
 
@@ -34,25 +32,22 @@
 ---
 ```text
 Mission-1-1-Codyssey-all-in-one/
-│
 ├── README.md
-│
+├── Dockerfile
+├── nginx.conf
+├── index.html
+├── archive/
+│   └── README001.md
 └── images/
-    ├── 02_01_Version_Check.png
-    ├── 02_02_Info_Summary.png
-    ├── 04_Linux_Commands_01.png
-    ├── 04_Linux_Commands_05(touch).png
-    ├── 04_Linux_Commands_06(echo_cat).png
-    ├── 04_Linux_Commands_07(echo_cp).png
-    ├── 04_Linux_Commands_08(mv).png
-    ├── 04_Linux_Commands_09(rm).png
-    └── ...
 ```
+- [Dockerfile](./Dockerfile)
+- [nginx.conf](./nginx.conf)
+- [index.html](./index.html)
+- [이전 README](./archive/README001.md)
+- [실습 스크린샷](./images/)
+
 
 ## 2. 실행 환경
-
-
-
 - OS: Windows 11 pro 버전 26H2 (OS 빌드 26300.9711 ) / Ubuntu 26.04.1 LTS (Resolute Raccoon)
 - Shell: Git Bash
 - Docker: version 29.9.2, build a82e528
@@ -315,7 +310,7 @@ $ cat c.txt
 $ rm c.txt
 ```
 
-### 1~4 출력결과 [pwd(위치확인), ls(목록 확인), ls -1a, mkdir(폴더생성), cd(폴더이동)]
+### 1~4 출력결과 [pwd(위치확인), ls(목록 확인), ls -la, mkdir(폴더생성), cd(폴더이동)]
 ```text
 # 1. pwd (현재 위치 확인)
 root@cb89cdd469fc:/# pwd
@@ -373,7 +368,7 @@ root@cb89cdd469fc:/practice# pwd  #현위치 변동 확인
 /practice
 ```
 
-### 1~4. 스크린샷 [pwd(위치확인), ls(목록 확인), ls -1a(숨긴목록), mkdir(폴더생성), cd(폴더이동)]
+### 1~4. 스크린샷 [pwd(위치확인), ls(목록 확인), ls -la(숨긴목록), mkdir(폴더생성), cd(폴더이동)]
 ![리눅스 터미널 명령어](images/04_Linux_Commands_01(pwd_ls_mkdir_cd).png)
 
 ### 5-1. touch(빈파일 생성) 실행 결과
@@ -388,7 +383,7 @@ file1.txt  file2.txt
 ### 5-2. touch(빈파일 생성) 스크린샷 
 ![리눅스 터미널 명령어](images/04_Linux_Commands_05(touch).png)
 
-### 6-1. echo(문자열 생성), > (파이프), cat(문자열 출력) 실행결과
+### 6-1. echo(문자열 생성), > (출력 리다이렉션), cat(문자열 출력) 실행결과
 ```text
 # 6. echo (문자열 생성)
 # 문자열 Hello Linux 생성 후 file1.txt에 써넣기 
@@ -447,7 +442,7 @@ file1.txt  file1_backup.txt  file2.txt
 # file1_backup.txt를 backup.txt로 파일이름 변경
 root@bfe91c61e6ed:/practice# mv file1_backup.txt backup.txt
 
-# 현폴더 목록 변경 확인 (3개 파일 중 file_backup.txt는 없어지고 backup.txt가 생김)
+# 현폴더 목록 변경 확인 (3개 파일 중 file1_backup.txt는 없어지고 backup.txt가 생김)
 root@bfe91c61e6ed:/practice# ls
 backup.txt  file1.txt  file2.txt
 
@@ -747,36 +742,37 @@ $
 ```
 ### 6-3.운영 / 로그 확인 / 리소스 확인 
 ```bash
-
-User@4F-75 UCRT64 ~/practice
-$ docker run -d nginx  # 이미지 nginx를 실행. 다운로드 안되어있으면 다운로드 받아 실행. 
+$ docker run -d --name nginx_log_test nginx
+$ docker ps
+$ docker logs nginx_log_test
+$ docker stats --no-stream nginx_log_test
+```
+#### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -d --name nginx_log_test nginx
 Unable to find image 'nginx:latest' locally
 latest: Pulling from library/nginx
-a670537bed70: Pull complete
-6e2ab1f3ef4e: Pull complete
-d322f1bf41d8: Pull complete
-c139fe92686d: Pull complete
-6fc242d221a6: Pull complete
-9f604dae09b2: Pull complete
-a071113ac575: Pull complete
-05a7d8870b4b: Download complete
-ca81da665177: Download complete
-Digest: sha256:5ab5b0b01097420873a3f3330f44248e34a3c2a3e8d5ee30658aeae8cb7435da
+6d2e43921e9e: Pull complete
+bbb080c71d50: Pull complete
+7cb4701ce7cd: Pull complete
+37fb86c2a767: Pull complete
+1962e1ff75b4: Pull complete
+512ac5e7ce8e: Pull complete
+1724c05f72c6: Pull complete
+d2c7e31f04a3: Download complete
+4582dace95e2: Download complete
+Digest: sha256:165ddde8751e75a1c907d24ef10d9f6deb08b57e0fe56caf67512486aff76d82
 Status: Downloaded newer image for nginx:latest
-4e6abed26f7477280b07ffc08d0d787cb485458e8a7d34d74713099847fd1788
+c9c6156cd85102ba619faf835ecdd2cd5732345e8502707f2a39b64425bf2270
 
-User@4F-75 UCRT64 ~/practice  
-$ docker ps #실행 중인 컨테이너 목록 표시 (nginx가 mystifying_poitras라는 컨테이너명으로 실행 중임)
-CONTAINER ID   IMAGE     COMMAND                   CREATED         STATUS         PORTS     NAMES
-4e6abed26f74   nginx     "/docker-entrypoint.…"   8 seconds ago   Up 7 seconds   80/tcp    mystifying_poitras
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS         PORTS     NAMES
+c9c6156cd851   nginx     "/docker-entrypoint.…"   10 seconds ago   Up 5 seconds   80/tcp    nginx_log_test
 
-User@4F-75 UCRT64 ~/practice 
-$ docker ps -a   #실행 중이거나 중지된 컨테이너 목록 표시 (nginx가 mystifying_poitras라는 컨테이너명으로 실행 중임) 
-CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS          PORTS     NAMES
-4e6abed26f74   nginx     "/docker-entrypoint.…"   15 seconds ago   Up 14 seconds   80/tcp    mystifying_poitras
-
-User@4F-75 UCRT64 ~/practice
-$ docker logs mystifying_poitras      # 컨테이너명 mystifying_poitras인 컨테이너의 로그 표시
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker logs nginx_log_test
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
@@ -786,29 +782,41 @@ $ docker logs mystifying_poitras      # 컨테이너명 mystifying_poitras인 �
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
 /docker-entrypoint.sh: Configuration complete; ready for start up
-2026/11/02 23:33:51 [notice] 1#1: using the "epoll" event method
-2026/11/02 23:33:51 [notice] 1#1: nginx/1.31.8
-2026/11/02 23:33:51 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19)
-2026/11/02 23:33:51 [notice] 1#1: OS: Linux 6.18.54.1-microsoft-standard-WSL2
-2026/11/02 23:33:51 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
-2026/11/02 23:33:51 [notice] 1#1: start worker processes
-2026/11/02 23:33:51 [notice] 1#1: start worker process 29
-2026/11/02 23:33:51 [notice] 1#1: start worker process 30
-2026/11/02 23:33:51 [notice] 1#1: start worker process 31
-2026/11/02 23:33:51 [notice] 1#1: start worker process 32
-2026/11/02 23:33:51 [notice] 1#1: start worker process 33
-2026/11/02 23:33:51 [notice] 1#1: start worker process 34
-2026/11/02 23:33:51 [notice] 1#1: start worker process 35
-2026/11/02 23:33:51 [notice] 1#1: start worker process 36
+2026/11/06 22:57:59 [notice] 1#1: using the "epoll" event method
+2026/11/06 22:57:59 [notice] 1#1: nginx/1.31.8
+2026/11/06 22:57:59 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19)
+2026/11/06 22:57:59 [notice] 1#1: OS: Linux 6.18.54.1-microsoft-standard-WSL2
+2026/11/06 22:57:59 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2026/11/06 22:57:59 [notice] 1#1: start worker processes
+2026/11/06 22:57:59 [notice] 1#1: start worker process 29
+2026/11/06 22:57:59 [notice] 1#1: start worker process 30
+2026/11/06 22:57:59 [notice] 1#1: start worker process 31
+2026/11/06 22:57:59 [notice] 1#1: start worker process 32
+2026/11/06 22:57:59 [notice] 1#1: start worker process 33
+2026/11/06 22:57:59 [notice] 1#1: start worker process 34
+2026/11/06 22:57:59 [notice] 1#1: start worker process 35
+2026/11/06 22:57:59 [notice] 1#1: start worker process 36
+2026/11/06 22:57:59 [notice] 1#1: start worker process 37
+2026/11/06 22:57:59 [notice] 1#1: start worker process 38
+2026/11/06 22:57:59 [notice] 1#1: start worker process 39
+2026/11/06 22:57:59 [notice] 1#1: start worker process 40
+2026/11/06 22:57:59 [notice] 1#1: start worker process 41
+2026/11/06 22:57:59 [notice] 1#1: start worker process 42
+2026/11/06 22:57:59 [notice] 1#1: start worker process 43
+2026/11/06 22:57:59 [notice] 1#1: start worker process 44
+2026/11/06 22:57:59 [notice] 1#1: start worker process 45
+2026/11/06 22:57:59 [notice] 1#1: start worker process 46
+2026/11/06 22:57:59 [notice] 1#1: start worker process 47
+2026/11/06 22:57:59 [notice] 1#1: start worker process 48
 
-User@4F-75 UCRT64 ~/practice
-$ docker stats --no-stream     #실행 중인 컨테이너의 리소스 사용현황을 스냅샷으로 출력 후 종료
-CONTAINER ID   NAME                 CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O     PIDS
-4e6abed26f74   mystifying_poitras   0.00%     8.805MiB / 7.605GiB   0.11%     1.17kB / 126B   0B / 12.3kB   9
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stats --no-stream nginx_log_test
+CONTAINER ID   NAME             CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O     PIDS
+c9c6156cd851   nginx_log_test   0.00%     17.77MiB / 15.52GiB   0.11%     1.17kB / 126B   0B / 12.3kB   21
 
 ```
-
-
+#### 스크린샷
+![리눅스 터미널 명령어](images/06_03_resource_log_check.png)
 ---
 
 ## 7. 컨테이너 실행 실습 
@@ -1190,7 +1198,14 @@ User@4F-16 UCRT64 ~/practice
 $
 ```
 ##### 스크린샷
-![Docker_exec_-it](images/08_02_02_Docker_exec_it.png)
+![Docker_exec_-it](images/08_03_02_Docker_exec_it.png)
+
+
+#### 정리명령
+```bash
+docker stop test_ubuntu
+docker rm test_ubuntu
+```
 ---
 
 ## 8. Dockerfile 커스텀 이미지
@@ -1219,7 +1234,9 @@ COPY index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
-
+```
+```bash
+cd ~/practice/Mission-1-1-Codyssey-all-in-one
 ```
 
 ```bash
@@ -1273,6 +1290,8 @@ $ docker rm -f my-web-8080
 my-web-8080
 
 ```
+![Docker file](images/0901.png)
+![09_8080p](images/09_8080p.png)
 
 ---
 
@@ -1287,7 +1306,7 @@ Docker 컨테이너는 호스트와 분리된 독립적인 네트워크 환경�
 
 #### ② 포트 매핑(Port Mapping)
 
-호스트와 구분되는 네크워크 환경을 갖는 컨테이너 내부의 서비스에 호스트에서 접근하려면 포트 매핑이 필요하다.
+호스트와 구분되는 네트워크 환경을 갖는 컨테이너 내부의 서비스에 호스트에서 접근하려면 포트 매핑이 필요하다.
 
 Docker의 `-p` 옵션은 호스트의 포트와 컨테이너의 포트를 연결하여 외부 요청이 컨테이너 내부 서비스에 전달되도록 설정한다.
 
@@ -1418,7 +1437,7 @@ my-web-8080
 ```
 ##### 스크린샷
 ![8080 Curl](images/10_8080curl.png)
-![8080 Curl](images/10_8080p.png)
+![8080 Curl](images/09_8080p.png)
 
 ---
 ## 10. 바인드 마운트 반영
@@ -1799,9 +1818,19 @@ hello again
 ```
 ---
 
-## 14. 재현성
-- 다른 환경에서도 동일 결과를 얻을 수 있도록 전제 조건을 명시한다.
-- **개인 PC에 종속된 경로/값이 있으면 대체 방법을 함께 기록한다.**
+## 14. 재현 환경 및 실행 시 주의사항
+
+본 과제는 **Windows 11 + Git Bash + Docker Desktop(WSL2 기반 Linux 컨테이너)** 환경에서 수행하였다.
+
+각 실습 항목에는 실행 명령어, 실행 결과 및 검증 증거를 함께 기록하였다. 다른 환경에서 재현할 때는 다음 공통 조건을 확인한다.
+
+- **Docker 실행 상태:** 실습 전에 Docker Desktop이 실행 중이고 Docker daemon에 접근 가능한지 확인한다. (2절)
+- **작업 디렉터리:** Dockerfile을 사용하는 빌드 명령은 Dockerfile, `nginx.conf`, `index.html`이 있는 프로젝트 루트에서 실행한다. (8절)
+- **Git Bash 경로:** 컨테이너 내부 Linux 경로를 명령 인자로 전달할 때는 필요한 경우 `MSYS_NO_PATHCONV=1`을 설정한다. Windows 호스트 경로를 바인드 마운트할 때는 `$(pwd -W)`를 사용한다. (7절, 10절)
+- **포트 사용:** 호스트의 8080 포트가 사용 중이면 다른 포트로 변경하고, 접속 확인 URL도 동일하게 변경한다. (9절, 10절)
+- **기존 리소스:** 같은 이름의 컨테이너가 이미 존재하면 실행 전에 상태를 확인하고 필요한 경우 정리한다. 볼륨은 컨테이너와 달리 별도로 유지되므로 삭제 여부를 확인한다. (7절, 10절, 11절)
+
+각 실습의 구체적인 실행 순서와 결과는 해당 절의 명령어 및 실행 로그를 기준으로 재현할 수 있다.
 
 | 항목 | 본 과제 값 | 대체 방법 |
 | --- | --- | --- |
