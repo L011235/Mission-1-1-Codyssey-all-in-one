@@ -944,7 +944,7 @@ exit
 
 #### 7-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
 ```bash
-# 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
+# Git Bash(MSYS)의 경로 자동 변환을 방지한다.
 export MSYS_NO_PATHCONV=1
 # 동일한 원본 이미지로 새로운 두 번째 컨테이너 실행
 docker run -it --name new_container ubuntu:latest cat /hello.txt
@@ -967,7 +967,7 @@ cat: /hello.txt: No such file or directory
 
 #### 7-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
 ```bash
-# 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
+# Git Bash(MSYS)의 경로 자동 변환을 방지한다.
 $ export MSYS_NO_PATHCONV=1
 # 첫 번째 컨테이너 정지 및 삭제 (Running -> Stopped -> Deleted)
 docker stop my_container
@@ -1039,7 +1039,7 @@ cat: /Hello.txt: No such file or directory
 
 #### 7-2-6 재시작한 컨테이너의 보존성
 ```bash
-$ export MSYS_NO_PATHCONV=1  # docker가 디렉토리 경로를 임의로 바꾸지 못하게 한다.
+$ export MSYS_NO_PATHCONV=1  # Git Bash(MSYS)의 경로 자동 변환을 방지한다.
 $ docker run -dit --name reactivated_container ubuntu:latest  # 우분투 이미지를 백그라운드로 실행
 $ docker exec reactivated_container sh -c 'echo "hello again" > /again.txt'  #컨테이너 내부 루트폴더에 again.txt 생성
 $ docker exec -it reactivated_container cat /again.txt                   #컨테이너 내부 파일 안의 문자를 읽어서 출력
@@ -1704,11 +1704,11 @@ branch 'main' set up to track 'origin/main'.
 ## 13. 트러블슈팅
 > 최소 2건 이상. 형식: 문제 → 원인 가설 → 확인 방법 → 해결
 
-### 사례 1. (예: 포트 충돌로 컨테이너 실행 실패)
+### 사례 1. Git Bash의 경로 자동 변환으로 컨테이너 파일 접근 실패
 - **문제**: `docker exec -it my_container cat /hello.txt` 실행 시 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 변환되어 파일을 찾지 못함
 - **원인**: Git Bash(MSYS)의 자동 경로 변환 기능이 컨테이너 내부 Linux 경로를 Windows 경로로 변경함
 - **확인 방법**: 오류 메시지에서 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 바뀐 것을 확인
-- **해결**: `export MSYS_NO_PATHCONV=1'를 먼저 선언하고 docker exec -it my_container cat /hello.txt` 실행
+- **해결**: `export MSYS_NO_PATHCONV=1`를 먼저 선언하고 `docker exec -it my_container cat /hello.txt` 실행
 - **해결 결과**: 경로 변환 없이 컨테이너 내부의 `/hello.txt`에 접근하여 `Hello Docker` 출력 확인
 
 #### 실행결과 (오류)
@@ -1765,7 +1765,7 @@ Hello Docker
 - **확인 방법**: 오류 메시지의 `bash:`를 확인하고, `>`가 호스트 셸에서 해석되는 명령 구조임을 확인
 - **해결**: `docker exec my_container sh -c 'echo "hello again" > /again.txt'` 실행
 - **해결 결과**: 컨테이너 내부에 `/again.txt`가 생성되고 `cat /again.txt`로 `hello again` 출력 확인
-> ⚠️ 위는 형식 예시입니다. **실제로 겪은 문제 2건**으로 교체하세요.
+
 
 #### 실행결과 (오류)
 ```text
