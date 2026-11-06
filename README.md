@@ -1534,16 +1534,71 @@ $ curl http://localhost:8080
 ![8080 Curl](images/10_8080p.png)
 
 ---
-
 ## 11. 바인드 마운트 반영
-> 호스트 파일 변경 → 컨테이너 내부 반영 전/후 비교
 
+>호스트 파일 변경 → 컨테이너 내부 반영 전/후 비교
+
+### 11-1. 바인드 마운트 실행 및 호스트 파일 연결
 ```bash
-$ docker run -d --name bind-test -v $(pwd -W)/site://usr/share/nginx/html nginx:alpine
-$ curl http://localhost:8080          # 변경 전
-$ echo "updated!" >> site/index.html   # 호스트에서 변경
-$ curl http://localhost:8080          # 변경 후
+#### Git Bash의 자동 경로 변환 방지
+export MSYS_NO_PATHCONV=1
+
+#### 호스트에 바인드 마운트용 폴더 및 HTML 파일 생성
+mkdir -p site
+echo "<h1>Test</h1>" > site/index.html
+
+#### Windows 호스트 경로와 컨테이너 내부 경로 연결
+docker run -d --name bind-test \
+  -p 8080:80 \
+  -v "$(pwd -W)/site:/usr/share/nginx/html" \
+  nginx:alpine
 ```
+```text
+-p 8080:80: 호스트의 8080 포트와 컨테이너의 80 포트 연결
+-v: 호스트 폴더와 컨테이너 내부 폴더를 바인드 마운트 방식으로 연결
+$(pwd -W)/site: Windows 호스트의 site 폴더
+/usr/share/nginx/html: 컨테이너 내부 Nginx 웹페이지 폴더
+```
+
+### 11-2. 호스트 파일 변경 전후 비교
+```bash
+#### 변경 전: 호스트의 index.html 내용을 컨테이너 웹서버에서 확인
+curl http://localhost:8080
+
+#### 호스트에서 index.html 내용 변경
+echo "<h1>Updated!</h1>" > site/index.html
+
+#### 변경 후: 수정된 내용이 컨테이너에 반영되었는지 확인
+curl http://localhost:8080
+```
+
+### 11-3. 실행 결과
+```bash
+User@4F-16 UCRT64 ~/practice
+$ mkdir site
+
+User@4F-16 UCRT64 ~/practice
+$ echo "<h1>Test</h1>" > site/index.html
+
+User@4F-16 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
+
+User@4F-16 UCRT64 ~/practice
+$ docker run -d --name bind-test -p 8080:80 -v "$(pwd -W)/site:/usr/share/nginx/html" nginx:alpine
+9683a0599bfb77f8296543c2fabb837badc63a25248f07401706ac214f8f6ccc
+
+User@4F-16 UCRT64 ~/practice
+$ curl http://localhost:8080
+<h1>Test</h1>
+
+User@4F-16 UCRT64 ~/practice
+$ echo "<h1>Updated!</h1>" > site/index.html
+
+User@4F-16 UCRT64 ~/practice
+$ curl http://localhost:8080
+<h1>Updated!</h1>
+```
+
 ```text
 User@4F-16 UCRT64 ~/practice
 $ mkdir site
@@ -1565,8 +1620,8 @@ $ echo "<h1>Updated!</h1>" > site/index.html
 User@4F-16 UCRT64 ~/practice
 $ curl http://localhost:8080
 <h1>Updated!</h1>
-
 ```
+### 11-4. 호스트와 컨테이너의 경로 선택 기준
 | 상황 | 경로 방식 | 핵심 이유 |
 | :--- | :--- | :--- |
 | **CLI (`docker run`)** | 절대 경로 우선, `$(pwd)` 활용 가능 | 상대 경로는 의도와 다르게 해석되거나 에러를 유발할 수 있음 |
