@@ -665,135 +665,10 @@ root@bfe91c61e6ed:/practice# ls -l a.txt
 - SUID·SGID는 주로 실행 파일에, Sticky Bit는 공용 디렉터리에 사용함.
 - `/tmp` 디렉터리는 대표적으로 `1777` 권한 사용.
 ---
-<!--
-## 6. Docker 설치 및 기본 점검
-```bash
-$ docker --version
-$ docker info
-```
-```text
-User@4F-75 UCRT64 ~
-$ docker --version
-Docker version 29.9.2, build a82e528
 
-User@4F-75 UCRT64 ~
-$ docker -v
-Docker version 29.9.2, build a82e528
-
-User@4F-75 UCRT64 ~
-$ docker info
-Client:
- Version:    29.9.2
- Context:    desktop-linux
- Debug Mode: false
- Plugins:
-  agent: Docker AI Agent Runner (Docker Inc.)
-    Version:  v1.152.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-agent.exe
-  ai: Docker AI Agent - Ask Gordon (Docker Inc.)
-    Version:  v1.33.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-ai.exe
-  buildx: Docker Buildx (Docker Inc.)
-    Version:  v0.38.1
-    Path:     C:\Users\User\.docker\cli-plugins\docker-buildx.exe
-  compose: Docker Compose (Docker Inc.)
-    Version:  v5.6.1
-    Path:     C:\Users\User\.docker\cli-plugins\docker-compose.exe
-  debug: Get a shell into any image or container (Docker Inc.)
-    Version:  0.49.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-debug.exe
-  desktop: Docker Desktop commands (Docker Inc.)
-    Version:  4.97.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-desktop.exe
-  dhi: CLI for managing Docker Hardened Images (Docker Inc.)
-    Version:  v0.0.9
-    Path:     C:\Users\User\.docker\cli-plugins\docker-dhi.exe
-  extension: Manages Docker extensions (Docker Inc.)
-    Version:  v0.2.32
-    Path:     C:\Users\User\.docker\cli-plugins\docker-extension.exe
-  init: Creates Docker-related starter files for your project (Docker Inc.)
-    Version:  v1.4.1
-    Path:     C:\Users\User\.docker\cli-plugins\docker-init.exe
-  mcp: Docker MCP Plugin (Docker Inc.)
-    Version:  v0.44.2
-    Path:     C:\Users\User\.docker\cli-plugins\docker-mcp.exe
-  model: Docker Model Runner (Docker Inc.)
-    Version:  v1.2.9
-    Path:     C:\Users\User\.docker\cli-plugins\docker-model.exe
-  offload: Docker Offload (Docker Inc.)
-    Version:  v0.7.21
-    Path:     C:\Users\User\.docker\cli-plugins\docker-offload.exe
-  pass: Docker Pass Secrets Manager Plugin (beta) (Docker Inc.)
-    Version:  v0.3.2
-    Path:     C:\Users\User\.docker\cli-plugins\docker-pass.exe
-  sandbox: "docker sandbox" is deprecated, use Docker Sandboxes instead (Docker Inc.)
-    Version:  v0.13.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-sandbox.exe
-  scout: Docker Scout (Docker Inc.)
-    Version:  v1.27.0
-    Path:     C:\Users\User\.docker\cli-plugins\docker-scout.exe
-
-Server:
- Containers: 20
-  Running: 3
-  Paused: 0
-  Stopped: 17
- Images: 5
- Server Version: 29.9.2
- Storage Driver: overlayfs
-  driver-type: io.containerd.snapshotter.v1
- Logging Driver: local
- Cgroup Driver: cgroupfs
- Cgroup Version: 2
- Plugins:
-  Volume: local
-  Network: bridge host ipvlan macvlan null overlay
-  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
- CDI spec directories:
-  /etc/cdi
-  /var/run/cdi
- Discovered Devices:
-  cdi: docker.com/gpu=webgpu
- Swarm: inactive
- Runtimes: io.containerd.runc.v2 nvidia runc
- Default Runtime: runc
- Init Binary: docker-init
- containerd version: b7a25261e029d68978bbf290df0a62fc819b3c51
- runc version: v1.5.2-0-g29dd3dc2
- init version: de40ad0
- Security Options:
-  seccomp
-   Profile: builtin
-  cgroupns
- Kernel Version: 6.18.54.1-microsoft-standard-WSL2
- Operating System: Docker Desktop
- OSType: linux
- Architecture: x86_64
- CPUs: 8
- Total Memory: 7.605GiB
- Name: docker-desktop
- ID: 5a52089e-1d18-4ba6-9f4b-ae3202c985f0
- Docker Root Dir: /var/lib/docker
- Debug Mode: false
- HTTP Proxy: http.docker.internal:3128
- HTTPS Proxy: http.docker.internal:3128
- No Proxy: hubproxy.docker.internal
- Labels:
-  com.docker.desktop.address=npipe://\\.\pipe\docker_cli
- Experimental: false
- Insecure Registries:
-  hubproxy.docker.internal:5555
-  127.0.0.0/8
-  ::1/128
- Live Restore Enabled: false
- Firewall Backend: iptables
-```
-
-![Docker Info 결과](images/06_01_docker_info.png)
--->
 ---
 
-## 7. Docker 기본 운영 명령
+## 6. Docker 기본 운영 명령
 ```bash
 $ docker images
 $ docker ps
@@ -801,7 +676,7 @@ $ docker ps -a
 $ docker logs <container>
 $ docker stats --no-stream
 ```
-### 7-1. 이미지 다운로드/목록 확인
+### 6-1. 이미지 다운로드/목록 확인
 ```bash
 User@4F-75 UCRT64 ~/practice
 $ docker images  #다운로드 되어있는 이미지 목록 표시 (없음)
@@ -825,7 +700,7 @@ IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
 hello-world:latest   c567b231f656       25.9kB         9.49kB
 ```
 
-### 7-2.컨테이너 실행/중지/목록확인
+### 6-2.컨테이너 실행/중지/목록확인
 ```bash
 User@4F-75 UCRT64 ~/practice
 $ docker run -d --name test_nginx nginx     #run nginx 백그라운드, 컨테이너이름:test_nginx
@@ -871,7 +746,7 @@ User@4F-75 UCRT64 ~/practice
 $
 
 ```
-### 7-3.운영 / 로그 확인 / 리소스 확인 
+### 6-3.운영 / 로그 확인 / 리소스 확인 
 ```bash
 
 User@4F-75 UCRT64 ~/practice
@@ -937,7 +812,7 @@ CONTAINER ID   NAME                 CPU %     MEM USAGE / LIMIT     MEM %     NE
 
 ---
 
-## 8. 컨테이너 실행 실습 
+## 7. 컨테이너 실행 실습 
 ```bash
 $ docker run hello-world
 $ docker run -it ubuntu bash
@@ -945,7 +820,7 @@ $ docker run -it ubuntu bash
 root@xxxx:/# ls
 root@xxxx:/# echo "hello from ubuntu"
 ```
-### 8-1. Hello Wolrd 실행결과
+### 7-1. Hello world 실행결과
 ```text
 # hello-world 이미지를 test_hollo라는 이름의 컨테이너로 실행
 User@4F-75 UCRT64 ~/practice
@@ -978,13 +853,13 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
-### 8-1 Hello Wolrd 스크린샷
-![Docker_run_hello_world](images/08_01_run_hello_wolrd.png)
+### 7-1 Hello world 스크린샷
+![Docker_run_hello_world](images/08_01_run_hello_world.png)
 
-### 8-2 생명주기에 따른 이미지와 컨테이너의 차이
+### 7-2 생명주기에 따른 이미지와 컨테이너의 차이
 #아래 명령어들을 Git Bash에 차례대로 입력하며 정적인 '이미지'와 동적인 '컨테이너'의 차이를 직접 검증할 수 있습니다.
 
-#### 8-2-1. 원본 이미지 준비 및 확인 (정적 상태)
+#### 7-2-1. 원본 이미지 준비 및 확인 (정적 상태)
 ```bash
 # 공식 우분투(Ubuntu) 이미지 다운로드 (생명주기: Stored)
 docker pull ubuntu:latest
@@ -1013,7 +888,7 @@ ubuntu:latest   6a06111c3b0a        163MB         45.9MB
 ##### 스크린샷
 ![Docker_Image_pull](images/08_02_01_Docker_Image_pull.png)
 
-#### 8-2-2. 컨테이너 생성 및 실행 (실체화 및 상태 변화)
+#### 7-2-2. 컨테이너 생성 및 실행 (실체화 및 상태 변화)
 ```bash
 # 이미지를 기반으로 'my_container'라는 이름의 가동 중인 컨테이너 생성
 # (생명주기: Created -> Running)
@@ -1037,7 +912,7 @@ d7a7b8974b4a   ubuntu:latest   "/bin/bash"   41 seconds ago   Up 37 seconds     
 ![Docker_run_container](images/08_02_02_Docker_run_container.png)
 
 
-#### 8-2-3. 컨테이너 내부 변경 (쓰기 가능한 레이어 검증)
+#### 7-2-3. 컨테이너 내부 변경 (쓰기 가능한 레이어 검증)
 ```bash
 # 실행 중인 컨테이너 내부의 Bash 셸로 접속
 docker exec -it my_container bash
@@ -1068,7 +943,7 @@ exit
 ##### 스크린샷
 ![Docker_run_container내부명령](images/08_02_03_Docker_exec_container_internal.png)
 
-#### 8-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
+#### 7-2-4. 이미지의 불변성 확인 (원본은 변하지 않음)
 ```bash
 # 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
 export MSYS_NO_PATHCONV=1
@@ -1091,7 +966,7 @@ cat: /hello.txt: No such file or directory
 ![Docker 이미지 불변성](images/08_02_04_Docker_run_new_container.png)
 
 
-#### 8-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
+#### 7-2-5. 컨테이너 삭제 및 데이터 소멸 확인 (생명주기 종료)
 ```bash
 # 디렉토리 경로를 Docker가 임의로 해석하지 않도록 함.
 $ export MSYS_NO_PATHCONV=1
@@ -1163,7 +1038,7 @@ cat: /Hello.txt: No such file or directory
 ##### 스크린샷
 ![Docker 컨테이너 삭제시 데이터 소멸](images/08_02_05_Docker_container_remove_data_delete.png)
 
-#### 2-2-6 재시작한 컨테이너의 보존성
+#### 7-2-6 재시작한 컨테이너의 보존성
 ```bash
 $ export MSYS_NO_PATHCONV=1  # docker가 디렉토리 경로를 임의로 바꾸지 못하게 한다.
 $ docker run -dit --name reactivated_container ubuntu:latest  # 우분투 이미지를 백그라운드로 실행
@@ -1242,14 +1117,14 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 
 
-### 8-3. attach(docker run) vs. detach(docker exec)
+### 7-3. attach(docker run) vs. detach(docker exec)
 
 > attach vs exec 차이: (관찰한 내용을 한~두 줄로 직접 정리)
 > #### • 포그라운드 방식 (run -it): 컨테이너를 켜면서 메인 프로세스(PID 1)와 내 터미널을 일체화한다. 메인 터미널을 직접 제어하므로 종료 시 컨테이너도 함께 꺼진다.
 > #### 백그라운드 방식 (run -dit 구동 후 exec -it): 컨테이너를 백그라운드로 띄워두고 필요할 때만 별도의 서브 프로세스로 진입한다. 진입 후 exit로 빠져나와도 새로 띄운 프로세스만 죽을 뿐 컨테이너는 안정적으로 유지된다.
 
 
-#### 8-3-1 docker run -it (포그라운드 진입 및 일체화)
+#### 7-3-1 docker run -it (포그라운드 진입 및 일체화)
 ```bash
 #ubuntu 이미지로 test_ubuntu라는 이름의 컨테이너 실행하고 ubuntu 터미널 내에서 리눅스 명령어 입력
 User@4F-16 UCRT64 ~/practice
@@ -1281,7 +1156,7 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS              
 ```
 
 
-#### 8-3-2. docker exec -it (컨테이너 안의 서브프로세스로 구동)
+#### 7-3-2. docker exec -it (컨테이너 안의 서브프로세스로 구동)
 > #### 백그라운드로 실행 중인 컨테이너에 exec -it로 진입하면, 메인 프로세스(PID 1)와 별개로 새로운 프로세스 단위의 터미널 실행이 가능하다. 따라서 여기서 exit해도 컨테이너가 죽지 않고 진입했던 서브 프로세스만 종료된다
 ##### 실행결과
 ```bash
