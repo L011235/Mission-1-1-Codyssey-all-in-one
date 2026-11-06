@@ -1497,7 +1497,7 @@ User@4F-16 UCRT64 ~/practice
 $ echo "<h1>Test</h1>" > site/index.html  #index.html 생성 내용은 Test
 
 User@4F-16 UCRT64 ~/practice   #경로와 경로를 직접 잇는 바인드 마운트 형태
-$ docker run -d --name bind-test -p 8080:80 -v "$(pwd -W)/site://usr/share/nginx/html" nginx:alpine
+$ docker run -d --name bind-test -p 8080:80 -v "$(pwd -W)/site:/usr/share/nginx/html" nginx:alpine
 9683a0599bfb77f8296543c2fabb837badc63a25248f07401706ac214f8f6ccc
 
 User@4F-16 UCRT64 ~/practice
