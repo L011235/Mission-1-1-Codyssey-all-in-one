@@ -958,7 +958,7 @@ user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ export MSYS_NO_PATHCONV=1
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -it --name my_container ubuntu:latest cat /hello.txt
+$ docker run -it --name new_container ubuntu:latest cat /hello.txt
 cat: /hello.txt: No such file or directory
 # 위 에러 문구가 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
 ```
