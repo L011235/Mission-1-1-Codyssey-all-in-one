@@ -1042,11 +1042,11 @@ cat: /Hello.txt: No such file or directory
 ```bash
 $ export MSYS_NO_PATHCONV=1  # docker가 디렉토리 경로를 임의로 바꾸지 못하게 한다.
 $ docker run -dit --name reactivated_container ubuntu:latest  # 우분투 이미지를 백그라운드로 실행
-$ docker exec -it reactivated_container echo "hello again" > /again.txt  #컨테이너 내부 루트폴더에 again.txt 생성
+$ docker exec reactivated_container sh -c 'echo "hello again" > /again.txt'  #컨테이너 내부 루트폴더에 again.txt 생성
 $ docker exec -it reactivated_container cat /again.txt                   #컨테이너 내부 파일 안의 문자를 읽어서 출력
 $ docker stop reactivated_container                                      #컨테이너를 중지시킨다.
 $ docker start reactivated_container                                     #그 컨테이너를 재시작한다.
-$ docker exec -it cat /again.txt                                         #중지되기 전에 존재했던 파일에 대해서 읽기 시도를 한다.
+$ docker exec -it reactivated_container cat /again.txt                                         #중지되기 전에 존재했던 파일에 대해서 읽기 시도를 한다.
 ```
 
 ##### 실행결과
@@ -1117,11 +1117,13 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 
 
-### 7-3. attach(docker run) vs. detach(docker exec)
+### 7-3. docker run -it와 docker exec -it의 차이
 
-> attach vs exec 차이: (관찰한 내용을 한~두 줄로 직접 정리)
-> #### • 포그라운드 방식 (run -it): 컨테이너를 켜면서 메인 프로세스(PID 1)와 내 터미널을 일체화한다. 메인 터미널을 직접 제어하므로 종료 시 컨테이너도 함께 꺼진다.
-> #### 백그라운드 방식 (run -dit 구동 후 exec -it): 컨테이너를 백그라운드로 띄워두고 필요할 때만 별도의 서브 프로세스로 진입한다. 진입 후 exit로 빠져나와도 새로 띄운 프로세스만 죽을 뿐 컨테이너는 안정적으로 유지된다.
+| 명령어 | 의미 | `exit` 실행 시 |
+|---|---|---|
+| `docker run -it` | 새 컨테이너를 실행하고 메인 프로세스에 연결 | 메인 프로세스가 종료되면서 컨테이너 중지 |
+| `docker exec -it` | 실행 중인 컨테이너에 별도 프로세스를 실행 | 해당 프로세스만 종료되고 컨테이너는 계속 실행 |
+| `docker attach` | 기존 컨테이너의 메인 프로세스에 터미널 연결 | 메인 프로세스 상태에 영향을 줄 수 있음 |
 
 
 #### 7-3-1 docker run -it (포그라운드 진입 및 일체화)
