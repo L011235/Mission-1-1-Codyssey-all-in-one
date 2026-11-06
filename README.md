@@ -1195,8 +1195,14 @@ $
 ---
 
 ## 9. Dockerfile 커스텀 이미지
-> 선택한 베이스: (A) 웹서버 기반 / (B) Linux 기반 — **택1 명시**
-> 커스텀 포인트와 목적: (예: 정적 콘텐츠 교체 → 접속 시 커스텀 페이지 노출)
+> **실습 유형: 웹서버 기반 (Nginx)**
+>
+> **커스텀 목적:** Nginx 기본 이미지를 바탕으로 사용자 정의 웹 페이지를 제공하는 커스텀 이미지 제작
+>
+> **커스텀 포인트:**
+> - `nginx:alpine`을 베이스 이미지로 사용
+> - `index.html`을 컨테이너의 웹 루트 디렉터리에 복사하여 기본 페이지 교체
+> - `nginx.conf`를 적용하여 웹서버 실행 환경 구성
 
 ```dockerfile
 FROM nginx:alpine
@@ -1264,8 +1270,8 @@ $ docker build -t my-web:1.0 .
  => => naming to docker.io/library/my-web:1.0                                                          0.0s
  => => unpacking to docker.io/library/my-web:1.0                                                       0.7s
 User@4F-16 UCRT64 ~/practice
-$ docker rm my-web:1.0
-my-web:1.0
+$ docker rm -ㄹ my-web-8080
+my-web-8080
 
 ```
 
