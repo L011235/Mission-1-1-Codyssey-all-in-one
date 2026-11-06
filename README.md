@@ -32,13 +32,18 @@
 ---
 ```text
 Mission-1-1-Codyssey-all-in-one/
+│
 ├── README.md
 ├── Dockerfile
 ├── nginx.conf
 ├── index.html
+│
 ├── archive/
 │   └── README001.md
+│
 └── images/
+    └── 실습 스크린샷들
+
 ```
 - [Dockerfile](./Dockerfile)
 - [nginx.conf](./nginx.conf)
@@ -1856,13 +1861,22 @@ hello again
 - 커밋 히스토리에도 토큰이 남지 않았는지 확인한다.
 
 ```bash
-$ git log --oneline            # 커밋 메시지에 민감정보 없는지 확인
-$ grep -r "ghp_" .             # 토큰 흔적 검색 (결과 없어야 정상)
-```
-```
-(검색 결과 없음 = 정상. 실제 확인 결과 붙여넣기)
-```
+# 현재 파일에서 토큰 형태 검색
+grep -RInE --exclude-dir=.git '(gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})' .
 
+# Git 커밋 이력의 변경 내용에서도 검색
+git log --all -p --pretty=format: |
+  grep -nE '(gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})'
+```
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git log --all -p --pretty=format: |   grep -nE '(gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})'
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ grep -RInE --exclude-dir=.git '(gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})'
+```
+##### 스크린샷
+![개인정보 보호 토큰/코드 업로드 검색](images/15_01_security.png)
 
 > 본 문서의 모든 실행 결과는 작성자가 직접 수행한 것이며,
 > 민감정보는 마스킹 처리되었습니다.
