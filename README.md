@@ -1293,7 +1293,7 @@ $
 
 ---
 
-## 13. Git 설정 및 GitHub 연동
+## 13. Git설정 및 GitHub연동
 ```bash
 $ git config --global user.name "본인이름"
 $ git config --global user.email "abc@example.com"   # 공개 저장소면 마스킹 권장
@@ -1305,10 +1305,95 @@ $ git add .
 $ git commit -m "feat:  과제수행 "
 $ git push -u origin main
 ```
-```
-(여기에 실제 실행 결과 붙여넣기 — 토큰/비밀번호는 절대 포함 금지)
+```text
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ git config --global user.name "Se**** J***"
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ git config --global user.email "a**@e******.com"
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ git config --list
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=schannel
+core.autocrlf=true~~~~~~
+core.fscache=true
+core.symlinks=false
+pull.rebase=false
+credential.helper=manager
+credential.https://dev.azure.com.usehttppath=true
+init.defaultbranch=master
+user.email=a**@e******.com
+user.name=Se**** J***
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ git init
+Initialized empty Git repository in C:/Users/user/Practice/.git/
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice (master)
+$ git remote add origin https://github.com/L011235/Mission-1-1-Codyssey-all-in-
+one
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice (master)
+$ cd Mission-1-1-Codyssey-all-in-one
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git add .
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git commit -m "1-1 과제수행"
+[main 2e95954] 1-1 과제수행
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git push -u origin main
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 20 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 323 bytes | 323.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one.git
+   a0a9e26..2e95954  main -> main
+branch 'main' set up to track 'origin/main'.
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+
 ```
 > VSCode ↔ GitHub 연동 완료 스크린샷 또는 push 성공 로그 첨부
+##### push
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git push -u origin main
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 20 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 323 bytes | 323.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one.git
+   a0a9e26..2e95954  main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+
 
 ---
 
