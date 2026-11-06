@@ -1220,6 +1220,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ```bash
 $ docker build -t my-web:1.0 .
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
+$ docker rm my-web:1.0
 ```
 ##### 실행결과
 ```text
@@ -1262,13 +1263,12 @@ $ docker build -t my-web:1.0 .
  => => exporting manifest list sha256:0818751b074b7d8744a0161e6fafabf6f3cc7e9b0d00d2d020b3fcfb46c64a1  0.0s
  => => naming to docker.io/library/my-web:1.0                                                          0.0s
  => => unpacking to docker.io/library/my-web:1.0                                                       0.7s
+User@4F-16 UCRT64 ~/practice
+$ docker rm my-web:1.0
+my-web:1.0
+
 ```
 
-```bash
-User@4F-16 UCRT64 ~/practice
-$ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
-af369df8d36567a5c9f36800a54d59365d97ec31bb845860b7cb5f967cdb7d22
-```
 ---
 
 ## 10. 포트 매핑 접속 증거
@@ -1332,9 +1332,11 @@ Nginx 웹서버 (80번 포트)
 `EXPOSE`만으로는 호스트에서 컨테이너에 접속할 수 있도록 포트가 자동으로 게시되지 않는다.
 
 ### 10-2. 포트 매핑 실행 및 접속 확인
+>9절의 실험에서 8080포트에 연결되어 있던 컨테이너 my-web:1.0을 종료시켰으므로 이 실험에서도 8080포트를 사용할 수 있다.
 ```bash
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
+$ docker rm my-web:1.0
 ```
 
 ### 10-3. 실행 결과 및 검증
@@ -1405,6 +1407,9 @@ $ curl http://localhost:8080
 </body>
 </html>
 
+User@4F-16 UCRT64 ~/practice
+$ docker rm my-web:1.0
+my-web:1.0
 ```
 ##### 스크린샷
 ![8080 Curl](images/10_8080curl.png)
