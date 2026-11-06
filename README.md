@@ -1270,7 +1270,7 @@ $ docker build -t my-web:1.0 .
  => => naming to docker.io/library/my-web:1.0                                                          0.0s
  => => unpacking to docker.io/library/my-web:1.0                                                       0.7s
 User@4F-16 UCRT64 ~/practice
-$ docker rm -ㄹ my-web-8080
+$ docker rm -f my-web-8080
 my-web-8080
 
 ```
@@ -1337,8 +1337,8 @@ Nginx 웹서버 (80번 포트)
 
 `EXPOSE`만으로는 호스트에서 컨테이너에 접속할 수 있도록 포트가 자동으로 게시되지 않는다.
 
-### 10-2. 포트 매핑 실행 및 접속 확인
->9절의 실험에서 8080포트에 연결되어 있던 컨테이너 my-web:1.0을 종료시켰으므로 이 실험에서도 8080포트를 사용할 수 있다.
+  ### 10-2. 포트 매핑 실행 및 접속 확인
+  >9절 실습에서 컨테이너 `my-web-8080`을 삭제했으므로, 10절에서도 8080 포트를 사용할 수 있다.
 ```bash
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
@@ -1399,7 +1399,7 @@ $ curl http://localhost:8080
 </head>
 <body>
     <div class="container">
-        <h1>🎉 장선익의 커스텀 Nginx 서버에 오신 것을 환영합니다.</h1>
+        <h1>🎉 장**의 커스텀 Nginx 서버에 오신 것을 환영합니다.</h1>
         <p>이것은 Docker로 빌드된 커스텀 nginx 컨테이너입니다.</p>
         <p>서버가 컨테이너 내부에서 성공적으로 실행 중입니다.</p>
 
@@ -1414,7 +1414,7 @@ $ curl http://localhost:8080
 </html>
 
 User@4F-16 UCRT64 ~/practice
-$ docker rm my-web-8080
+$ docker rm -f my-web-8080
 my-web-8080
 ```
 ##### 스크린샷
