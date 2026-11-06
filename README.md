@@ -918,8 +918,8 @@ d7a7b8974b4a   ubuntu:latest   "/bin/bash"   41 seconds ago   Up 37 seconds     
 docker exec -it my_container bash
 
 # [컨테이너 내부셸] 내부에서 새로운 파일 생성 (가변성 확인)
-echo "Hello Docker" > /Hello.txt
-cat /Hello.txt
+echo "Hello Docker" > /hello.txt
+cat /hello.txt
 
 # [컨테이너 내부셸] exit 입력하여 호스트(Git Bash)로 복귀
 exit
