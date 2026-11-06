@@ -37,6 +37,9 @@
 ---
 
 ## 2. 실행 환경
+
+
+
 - OS: Windows 11 pro 버전 26H2 (OS 빌드 26300.9711 ) / Ubuntu 26.04.1 LTS (Resolute Raccoon)
 - Shell: Git Bash
 - Docker: version 29.9.2, build a82e528
@@ -72,7 +75,7 @@ $ winver
 # GUI 창으로 OS 버전 표시 (스크린샷 참고)
 ```
 
-#### 1 Docker 실행환경 체크
+### 2-1. Docker 실행환경 체크
 ![실행환경 버전 체크](images/02_01_Version_Check.png)
 
 
@@ -100,9 +103,135 @@ Containers: 2
 Images: 1
 ```
 
-#### 2 Docker info 정보추출
-![docker info 정보추출](images/02_02_Info_Summary.png)
+### 2-2. docker info
+```bash
+$ docker --version
+$ docker info
+```
 
+
+```text
+User@4F-75 UCRT64 ~
+$ docker --version
+Docker version 29.9.2, build a82e528
+
+User@4F-75 UCRT64 ~
+$ docker -v
+Docker version 29.9.2, build a82e528
+
+User@4F-75 UCRT64 ~
+$ docker info
+Client:
+ Version:    29.9.2
+ Context:    desktop-linux
+ Debug Mode: false
+ Plugins:
+  agent: Docker AI Agent Runner (Docker Inc.)
+    Version:  v1.152.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-agent.exe
+  ai: Docker AI Agent - Ask Gordon (Docker Inc.)
+    Version:  v1.33.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-ai.exe
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.38.1
+    Path:     C:\Users\User\.docker\cli-plugins\docker-buildx.exe
+  compose: Docker Compose (Docker Inc.)
+    Version:  v5.6.1
+    Path:     C:\Users\User\.docker\cli-plugins\docker-compose.exe
+  debug: Get a shell into any image or container (Docker Inc.)
+    Version:  0.49.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-debug.exe
+  desktop: Docker Desktop commands (Docker Inc.)
+    Version:  4.97.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-desktop.exe
+  dhi: CLI for managing Docker Hardened Images (Docker Inc.)
+    Version:  v0.0.9
+    Path:     C:\Users\User\.docker\cli-plugins\docker-dhi.exe
+  extension: Manages Docker extensions (Docker Inc.)
+    Version:  v0.2.32
+    Path:     C:\Users\User\.docker\cli-plugins\docker-extension.exe
+  init: Creates Docker-related starter files for your project (Docker Inc.)
+    Version:  v1.4.1
+    Path:     C:\Users\User\.docker\cli-plugins\docker-init.exe
+  mcp: Docker MCP Plugin (Docker Inc.)
+    Version:  v0.44.2
+    Path:     C:\Users\User\.docker\cli-plugins\docker-mcp.exe
+  model: Docker Model Runner (Docker Inc.)
+    Version:  v1.2.9
+    Path:     C:\Users\User\.docker\cli-plugins\docker-model.exe
+  offload: Docker Offload (Docker Inc.)
+    Version:  v0.7.21
+    Path:     C:\Users\User\.docker\cli-plugins\docker-offload.exe
+  pass: Docker Pass Secrets Manager Plugin (beta) (Docker Inc.)
+    Version:  v0.3.2
+    Path:     C:\Users\User\.docker\cli-plugins\docker-pass.exe
+  sandbox: "docker sandbox" is deprecated, use Docker Sandboxes instead (Docker Inc.)
+    Version:  v0.13.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-sandbox.exe
+  scout: Docker Scout (Docker Inc.)
+    Version:  v1.27.0
+    Path:     C:\Users\User\.docker\cli-plugins\docker-scout.exe
+
+Server:
+ Containers: 20
+  Running: 3
+  Paused: 0
+  Stopped: 17
+ Images: 5
+ Server Version: 29.9.2
+ Storage Driver: overlayfs
+  driver-type: io.containerd.snapshotter.v1
+ Logging Driver: local
+ Cgroup Driver: cgroupfs
+ Cgroup Version: 2
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+ CDI spec directories:
+  /etc/cdi
+  /var/run/cdi
+ Discovered Devices:
+  cdi: docker.com/gpu=webgpu
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 nvidia runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: b7a25261e029d68978bbf290df0a62fc819b3c51
+ runc version: v1.5.2-0-g29dd3dc2
+ init version: de40ad0
+ Security Options:
+  seccomp
+   Profile: builtin
+  cgroupns
+ Kernel Version: 6.18.54.1-microsoft-standard-WSL2
+ Operating System: Docker Desktop
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 8
+ Total Memory: 7.605GiB
+ Name: docker-desktop
+ ID: 5a52089e-1d18-4ba6-9f4b-ae3202c985f0
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ HTTP Proxy: http.docker.internal:3128
+ HTTPS Proxy: http.docker.internal:3128
+ No Proxy: hubproxy.docker.internal
+ Labels:
+  com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+ Experimental: false
+ Insecure Registries:
+  hubproxy.docker.internal:5555
+  127.0.0.0/8
+  ::1/128
+ Live Restore Enabled: false
+ Firewall Backend: iptables
+```
+
+![Docker Info 결과](images/06_01_docker_info.png)
+
+### 2-3. Docker info 정보추출
+![docker info 정보추출](images/02_02_Info_Summary.png)
 ---
 
 ## 3. 수행 체크리스트
@@ -112,49 +241,49 @@ Images: 1
 
 ### 1. 제출 저장소 및 기술 문서
 - [ ] 1-1. GitHub 저장소 링크로 제출 + 개요/환경/체크리스트/검증방법 포함
-- [ ] 1-2. 구성 → [1. 프로젝트 개요](#1-프로젝트-개요) / [15. 재현성](#15-재현성)
+- [ ] 1-2. 프로젝트 개요 및 재현성 → [1. 프로젝트 개요](#1-프로젝트-개요) / [14. 재현성](#14-재현성)
 
 ### 2. 터미널 조작 명령어
 - [ ] 2-1. pwd / ls -la(숨김 포함) / mkdir / cp / mv / 이름변경 / rm / cat / touch 수행
-- [ ] 2-2. 실행결과 → [4. 터미널 조작 명령어](#4-터미널-조작-명령어)
+- [ ] 2-2. 터미널 조작 → [4. 터미널 조작 명령어](#4-터미널-조작-명령어)
 
 ### 3. 권한 실습 및 증거 기록
 - [ ] 3-1. 파일 1개 + 디렉터리 1개 권한 변경 전/후 비교
-- [ ] 3-2. 실행결과 → [5. 파일 권한 실습](#5-파일-권한-실습)
+- [ ] 3-2. 파일 권한 실습 → [5. 파일 권한 실습](#5-파일-권한-실습)
 
 ### 4. Docker 설치 및 기본 점검
 - [ ] 4-1. docker --version / docker info(또는 동등 점검) 확인
-- [ ] 4-2. 실행결과 → [6. Docker 설치 및 기본 점검](#6-docker-설치-및-기본-점검)
+- [ ] 4-2. Docker 설치 및 점검 → [2. 실행 환경]((#2-실행-환경))
 
 ### 5. Docker 기본 운영 명령 수행
 - [ ] 5-1. docker images / ps / ps -a / logs / stats 실행
-- [ ] 5-2. 실행결과 → [7. Docker 기본 운영 명령](#7-docker-기본-운영-명령)
+- [ ] 5-2. 실행결과 → [6. Docker 기본 운영 명령](#6-docker-기본-운영-명령)
 
 ### 6. 컨테이너 실행 실습
 - [ ] 6-1. hello-world 성공 + ubuntu 진입 후 ls/echo + attach/exec 차이 관찰
-- [ ] 6-2. 실행결과 → [8. 컨테이너 실행 실습](#8-컨테이너-실행-실습)
+- [ ] 6-2. 실행결과 → [7. 컨테이너 실행 실습](#7-컨테이너-실행-실습)
 
 ### 7. 기존 Dockerfile 기반 커스텀 이미지 제작
 - [ ] 7-1. 베이스 선택(A/B) + 커스텀 포인트 목적 + 빌드·실행 성공
-- [ ] 7-2. 실행결과 → [9. Dockerfile 커스텀 이미지](#9-dockerfile-커스텀-이미지)
+- [ ] 7-2. 실행결과 → [8. Dockerfile 커스텀 이미지](#8-dockerfile-커스텀-이미지)
 
 ### 8. 포트 매핑 및 접속 증거
 - [ ] 8-1. -p <host>:<container> 실행 + 브라우저(주소창+포트) 또는 curl 응답 확인
-- [ ] 8-2. 실행결과 → [10. 포트 매핑 접속 증거](#10-포트-매핑-접속-증거)
+- [ ] 8-2. 포트 매핑 → [9. 포트 매핑 접속 증거](#9-포트-매핑-접속-증거)
 
 ### 9. Docker 볼륨 영속성 검증 (+ 바인드 마운트)
 - [ ] 9-1. (바인드) 호스트 변경 → 컨테이너 반영 전/후 비교
-- [ ] 9-2. 바인드 실행결과 → [11. 바인드 마운트 반영](#11-바인드-마운트-반영)
+- [ ] 9-2. 바인드 실행결과 → [10. 바인드 마운트 반영](#10-바인드-마운트-반영)
 - [ ] 9-3. (볼륨) 생성/연결 후 컨테이너 삭제 전/후 데이터 유지 증명
-- [ ] 9-4. 볼륨 실행결과 → [12. 볼륨 영속성 검증](#12-볼륨-영속성-검증)
+- [ ] 9-4. 볼륨 실행결과 → [11. 볼륨 영속성 검증](#11-볼륨-영속성-검증)
 
 ### 10. Git 설정 및 GitHub 연동
 - [ ] 10-1. git config --list + GitHub 로그인·VSCode 저장소 연동 완료
-- [ ] 10-2. 실행결과 → [13. Git 설정 및 GitHub 연동](#13-git-설정-및-github-연동)
+- [ ] 10-2. 실행결과 → [12. Git 설정 및 GitHub 연동](#12-git-설정-및-github-연동)
 
 ### 11. 보안 및 개인정보 보호
 - [ ] 11-1. 토큰/이메일/비밀번호/인증코드 마스킹 확인
-- [ ] 11-2. 실행결과 → [16. 보안 및 개인정보 보호](#16-보안-및-개인정보-보호)
+- [ ] 11-2. 실행 결과 → [15. 보안 및 개인정보 보호](#15-보안-및-개인정보-보호)
 
 ---
 
@@ -372,7 +501,7 @@ $ chmod 750 practice   # 보안상 기타 인원의 권한을 없앰
 $ ls -ld practice      # 변경 후
 ```
 ```text
-# 1. 디렉터리 권한 변경 (755-->750)
+### 1. 디렉터리 권한 변경 (755-->750)
 root@bfe91c61e6ed:/# mkdir practice
 #변경 전
 root@bfe91c61e6ed:/# ls -ld practice
@@ -383,7 +512,7 @@ root@bfe91c61e6ed:/# ls -ld practice
 drwxr-x--- 2 root root 4096 Oct 31 10:11 practice
 
 
-# 2. 파일 권한 변경 (644-->640)
+### 2. 파일 권한 변경 (644-->640)
 root@bfe91c61e6ed:/# cd practice
 root@bfe91c61e6ed:/practice# touch a.txt
 root@bfe91c61e6ed:/practice# ls
@@ -397,20 +526,132 @@ root@bfe91c61e6ed:/practice# ls -l a.txt
 -rw-r----- 1 root root 0 Oct 31 10:12 a.txt
 
 ```
-> 해석: 
->  #### 변경 전 
->  #### 755 = 소유자 rwx(111(2),7) / 그룹 r-x(101(2),5) / 기타 r-x(101(2),5), 
->  #### 644 = 소유자 rw-(110(2),6) / 그룹 r--(100(2),4) / 기타 r--(100(2),4)
+### 5-1 실행 결과 해석
+#### 5-1-1. 디렉터리 권한 변경 (755 → 750)
 
-> 변경 이유 :    
->#### 보안상 소유자와 그룹원 이외에 권한을 줄 이유가 없기 때문에 기타(other)의 권한을 읽기 없앰
+| 구분 | 변경 전 | 변경 후 | 의미 |
+|---|---|---|---|
+| 소유자(Owner) | `rwx(7)` | `rwx(7)` | 읽기, 쓰기, 진입 가능 |
+| 그룹(Group) | `r-x(5)` | `r-x(5)` | 읽기, 진입 가능 |
+| 기타(Other) | `r-x(5)` | `---(0)` | 모든 권한 제거 |
 
-> 변경 후: 750, 640, 기타에 해당하는 권한을 0으로 만들어 권한을 없앰. 
->  #### 폴더 진입을 위해 eXcute(실행)권한이 필요함.(즉, 홀수) 
->  #### 일반적으로 폴더 권한은 755, 문서 파일 권한은 644가 디폴트 
+- 변경 이유: 소유자와 그룹 구성원 외 사용자의 접근 권한 제거
+- 디렉터리 `r`: 내부 파일 및 디렉터리 목록 확인
+- 디렉터리 `w`: 파일 생성, 삭제, 이름 변경 (일반적으로 `x` 권한도 필요)
+- 디렉터리 `x`: 디렉터리 진입 및 내부 항목 접근
+
+**참고:** 디렉터리의 `x`는 프로그램 실행이 아닌 진입 및 탐색 권한을 의미함. `x`가 포함된 권한 숫자는 홀수(1, 3, 5, 7).
+
+#### 5-1-2. 파일 권한 변경 (644 → 640)
+
+| 구분 | 변경 전 | 변경 후 | 의미 |
+|---|---|---|---|
+| 소유자(Owner) | `rw-(6)` | `rw-(6)` | 읽기, 쓰기 가능 |
+| 그룹(Group) | `r--(4)` | `r--(4)` | 읽기 가능 |
+| 기타(Other) | `r--(4)` | `---(0)` | 모든 권한 제거 |
+
+- 변경 이유: 소유자와 그룹 구성원 외 사용자의 파일 읽기 권한 제거
+- 파일 `r`: 파일 내용 읽기
+- 파일 `w`: 파일 내용 수정
+- 파일 `x`: 실행 가능한 파일 실행
+
+#### 5-1-3. 권한 숫자 계산 원리
+
+| 권한 | 의미 | 2진수 | 숫자값 |
+|---|---|---|---|
+| `r` | 읽기(Read) | `100` | 4 |
+| `w` | 쓰기(Write) | `010` | 2 |
+| `x` | 실행(Execute) | `001` | 1 |
+| `---` | 권한 없음 | `000` | 0 |
+
+| 숫자 | 2진수 | 권한 |
+|---|---|---|
+| 7 | `111` | `rwx` |
+| 6 | `110` | `rw-` |
+| 5 | `101` | `r-x` |
+| 4 | `100` | `r--` |
+| 0 | `000` | `---` |
+
+**권한 계산 예시**
+
+- `755` = 소유자 `rwx(7)` / 그룹 `r-x(5)` / 기타 `r-x(5)`
+- `750` = 소유자 `rwx(7)` / 그룹 `r-x(5)` / 기타 `---(0)`
+- `644` = 소유자 `rw-(6)` / 그룹 `r--(4)` / 기타 `r--(4)`
+- `640` = 소유자 `rw-(6)` / 그룹 `r--(4)` / 기타 `---(0)`
+
+#### 5-1-4. 일반적인 기본 권한
+
+일반적으로 `umask 022` 환경에서 디렉터리는 `755`, 일반 파일은 `644` 권한으로 생성됨.
+
+| 구분 | 기본 생성 권한 | umask | 최종 권한 |
+|---|---|---|---|
+| 디렉터리 | 777 | 022 | 755 |
+| 일반 파일 | 666 | 022 | 644 |
+
+- 디렉터리: `777`에 umask `022` 적용 → `755`
+- 일반 파일: `666`에 umask `022` 적용 → `644`
+- 일반 파일은 기본적으로 실행 권한(`x`)이 부여되지 않음.
+- `umask` 명령어로 현재 설정 확인 가능
+
+**참고:** 실제 생성 권한은 사용자별 `umask` 설정에 따라 달라짐.
+
+#### 5-1-5. 실습 시 주의 사항
+
+현재 실습은 `root` 계정으로 실행했으므로 일반 사용자와 권한 제한 결과가 다를 수 있음.
+
+- `root`: 일반적인 파일 권한 검사를 우회할 수 있는 관리자 권한 보유
+- 일반 사용자: 설정된 파일 및 디렉터리 권한에 따라 접근 제한 적용
+
+실제 접근 제한 여부는 일반 사용자 계정으로 별도 테스트 필요.
+
+**최종 정리**
+
+- `755 → 750`: 디렉터리의 기타 사용자 접근 권한 제거
+- `644 → 640`: 파일의 기타 사용자 읽기 권한 제거
+- 디렉터리의 `x`: 진입 및 내부 항목 접근 권한
+- 파일의 `x`: 실행 권한
+- 일반적인 기본 권한: 디렉터리 `755`, 일반 파일 `644` (umask `022` 기준)
 
 ---
 
+#### 5-2. 리눅스 파일 권한 비트 구조 (Permission Bits)
+
+리눅스 파일 권한은 **일반 권한 9비트 + 특수 권한 3비트 = 총 12비트**로 구성됨.
+
+#### 5-2-1. 권한 비트 구성
+
+1. 일반 권한: 9비트 (소유자·그룹·기타 사용자 각각 `rwx` 3비트)
+2. 특수 권한: 3비트 (SUID·SGID·Sticky Bit 각각 1비트)
+3. 전체 권한 필드: 12비트
+
+#### 5-2-2. 권한 표기법
+
+일반 권한은 3자리 숫자로 표기하며, 특수 권한을 포함하면 앞에 숫자 한 자리를 추가하여 4자리로 표기함.
+
+| 표기 | 의미 |
+|---|---|
+| `644` | 일반 권한 644 |
+| `0644` | 특수 비트 없음 + 일반 권한 644 |
+| `4755` | SUID(4) + 일반 권한 755 |
+| `2755` | SGID(2) + 일반 권한 755 |
+| `1777` | Sticky Bit(1) + 일반 권한 777 |
+
+#### 5-2-3. 특수 권한의 숫자값
+
+| 특수 권한 | 숫자값 | 기능 |
+|---|---|---|
+| SUID | 4 | 실행 파일을 파일 소유자의 권한으로 실행 |
+| SGID | 2 | 실행 파일은 소유 그룹 권한으로 실행, 디렉터리는 생성되는 파일에 그룹 상속 |
+| Sticky Bit | 1 | 공용 디렉터리에서 파일 소유자·디렉터리 소유자·root 외 사용자의 파일 삭제 및 이름 변경 제한 |
+
+**참고**
+
+- 일반 문서 파일은 보통 `644`로 설정함.
+- 특수 권한이 없는 경우 앞자리 `0` 생략 가능 (`0644` = `644`).
+- SUID·SGID는 주로 실행 파일에, Sticky Bit는 공용 디렉터리에 사용함.
+- `/tmp` 디렉터리는 대표적으로 `1777` 권한 사용.
+---
+<!--
 ## 6. Docker 설치 및 기본 점검
 ```bash
 $ docker --version
@@ -535,7 +776,7 @@ Server:
 ```
 
 ![Docker Info 결과](images/06_01_docker_info.png)
-
+-->
 ---
 
 ## 7. Docker 기본 운영 명령
@@ -546,7 +787,7 @@ $ docker ps -a
 $ docker logs <container>
 $ docker stats --no-stream
 ```
-# 1. 이미지 다운로드/목록 확인
+### 7-1. 이미지 다운로드/목록 확인
 ```bash
 User@4F-75 UCRT64 ~/practice
 $ docker images  #다운로드 되어있는 이미지 목록 표시 (없음)
@@ -570,7 +811,7 @@ IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
 hello-world:latest   c567b231f656       25.9kB         9.49kB
 ```
 
-# 2.컨테이너 실행/중지/목록확인
+### 7-2.컨테이너 실행/중지/목록확인
 ```bash
 User@4F-75 UCRT64 ~/practice
 $ docker run -d --name test_nginx nginx     #run nginx 백그라운드, 컨테이너이름:test_nginx
@@ -616,7 +857,7 @@ User@4F-75 UCRT64 ~/practice
 $
 
 ```
-# 3.운영 / 로그 확인 / 리소스 확인 
+### 7-3.운영 / 로그 확인 / 리소스 확인 
 ```bash
 
 User@4F-75 UCRT64 ~/practice
