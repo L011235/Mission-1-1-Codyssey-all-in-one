@@ -1220,7 +1220,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ```bash
 $ docker build -t my-web:1.0 .
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
-$ docker rm my-web:1.0
+$ docker rm -f my-web-8080
 ```
 ##### 실행결과
 ```text
@@ -1336,7 +1336,7 @@ Nginx 웹서버 (80번 포트)
 ```bash
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
-$ docker rm my-web:1.0
+$ docker rm -f my-web-8080
 ```
 
 ### 10-3. 실행 결과 및 검증
@@ -1408,8 +1408,8 @@ $ curl http://localhost:8080
 </html>
 
 User@4F-16 UCRT64 ~/practice
-$ docker rm my-web:1.0
-my-web:1.0
+$ docker rm my-web-8080
+my-web-8080
 ```
 ##### 스크린샷
 ![8080 Curl](images/10_8080curl.png)
@@ -1479,6 +1479,8 @@ $ echo "<h1>Updated!</h1>" > site/index.html
 User@4F-16 UCRT64 ~/practice
 $ curl http://localhost:8080
 <h1>Updated!</h1>
+
+docker rm -f bind-test
 ```
 
 ```text
@@ -1502,6 +1504,10 @@ $ echo "<h1>Updated!</h1>" > site/index.html
 User@4F-16 UCRT64 ~/practice
 $ curl http://localhost:8080
 <h1>Updated!</h1>
+
+User@4F-16 UCRT64 ~/practice
+$ docker rm -f bind-test
+bind-test
 ```
 ### 11-4. 호스트와 컨테이너의 경로 선택 기준
 | 상황 | 경로 방식 | 핵심 이유 |
