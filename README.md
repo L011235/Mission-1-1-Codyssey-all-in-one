@@ -1474,63 +1474,89 @@ $ curl http://localhost:8080
 
 
 
+
 ## 12. 볼륨 영속성 검증
-> 볼륨 생성/연결 → 컨테이너 삭제 전/후에도 데이터가 유지됨을 증명
 
-```bash
+> 볼륨 생성 및 컨테이너 연결 → 데이터 저장 → 컨테이너 삭제 → 데이터 유지 확인
 
+### 12-1. 실습 목적
+
+- Docker 볼륨(mydata)을 생성하고 컨테이너의 `/data`에 연결
+- 컨테이너 내부에 파일 작성 및 내용 확인
+- 컨테이너 삭제 후에도 볼륨 데이터가 유지되는지 검증
+
+### 12-2. 명령어 및 실행 결과
+
+```text
+User@DESKTOP-V6OTICP UCRT64 ~/practice
 $ export MSYS_NO_PATHCONV=1
 
-$ docker volume create mydata
-
-$ docker run -d --name vol-test -v mydata:/data alpine sleep 6000
-
-$ docker exec vol-test sh -c 'echo "persist me" > /data/test.txt'
-
-$ docker exec vol-test sh -c 'cat /data/test.txt'  # 삭제 전 확인
-
-$ docker rm -f vol-test                             # 컨테이너 삭제
-
-$ docker run --rm -v mydata:/data alpine cat /data/test.txt  # 삭제 후 유지 확인
-```
-
-
-```bash
-
-User@4F-103 UCRT64 ~/practice
-$ export MSYS_NO_PATHCONV=1
-
-User@4F-103 UCRT64 ~/practice
+User@DESKTOP-V6OTICP UCRT64 ~/practice  #docker 볼륨을 생성
 $ docker volume create mydata
 mydata
 
-User@4F-103 UCRT64 ~/practice
-$ docker run -d --name vol-test -v mydata:/data alpine sleep 6000
-ce57272fdf391527ee9fd672aeaf096776efb01732aa4369d55a43c99d3f7d71
+User@DESKTOP-V6OTICP UCRT64 ~/practice  #docker 볼륨 생성 확인
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     mydata
 
-User@4F-103 UCRT64 ~/practice
+User@DESKTOP-V6OTICP UCRT64 ~/practice  
+#docker 볼륨과 컨테이너 내 data 폴더를 연결하는 컨테이너 vol-test를 백그라운드에서 생성
+$ docker run -d --name vol-test -v mydata:/data alpine sleep 6000
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+881fc932939e: Pull complete
+86ff264fe568: Download complete
+c35a7d82b8fa: Download complete
+Digest: sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a
+Status: Downloaded newer image for alpine:latest
+fb37d821b08feea6f3490a3d608edf55217e012c750085e260bb2632d014eb24
+
+#docker 컨테이너 vol-test의 루트폴더 아래에 data/test.txt를 생성하고 persist me를 입력
+User@DESKTOP-V6OTICP UCRT64 ~/practice
 $ docker exec vol-test sh -c 'echo "persist me" > /data/test.txt'
 
-User@4F-103 UCRT64 ~/practice
-$ ls
-
-User@4F-103 UCRT64 ~/practice
-$ docker exec vol-test sh -c 'cat /data/test.txt'    # 삭제 전 확인
+#docker 컨테이너 vol-test의  data/test.txt의 내용을 읽어 화면에 출력
+User@DESKTOP-V6OTICP UCRT64 ~/practice
+$ docker exec vol-test sh -c 'cat /data/test.txt'
 persist me
 
-User@4F-103 UCRT64 ~/practice
-$ docker rm -f vol-test                               # 컨테이너 삭제
+User@DESKTOP-V6OTICP UCRT64 ~/practice  # 컨테이너 vol-test를 삭제
+$ docker rm -f vol-test
 vol-test
 
-User@4F-103 UCRT64 ~/practice
-$ docker run --rm -v mydata:/data alpine cat /data/test.txt   # 삭제 후 유지 확인
+User@DESKTOP-V6OTICP UCRT64 ~/practice  #컨테이너 삭제 후에도 볼륨 mydata는 건재
+$ docker volume ls --filter name=mydata
+DRIVER    VOLUME NAME
+local     mydata
+
+User@DESKTOP-V6OTICP UCRT64 ~/practice  
+# 컨테이너를 새로 생성하여 컨테이너의 data폴더와 볼륨 mydata를 연결. 
+# data/test.txt가 볼륨에서 새 컨테이너로 동기화됨.
+# 새 컨테이너의 data폴더 안의 test.txt 파일을 읽어서 화면에 출력 
+$ docker run --rm -v mydata:/data alpine cat /data/test.txt
 persist me
-
-User@4F-103 UCRT64 ~/practice
-$
-
 ```
-> 해석: 컨테이너를 삭제해도 볼륨(mydata)에 저장된 데이터는 그대로 유지된다.
+
+### 12-3. 실행 결과 해석
+
+- 볼륨 생성: `mydata` 생성 완료
+- 데이터 저장: 컨테이너 내부 `/data/test.txt`에 `persist me` 기록
+- 컨테이너 삭제: `vol-test` 삭제 완료
+- 데이터 확인: 새로운 컨테이너에서 기존 파일 내용 `persist me` 확인
+
+**검증 결과:** 컨테이너를 삭제해도 Docker 볼륨에 저장된 데이터는 유지됨.
+
+**참고**
+- `docker rm -f vol-test`는 컨테이너만 삭제하며 연결된 볼륨은 삭제하지 않음.
+- `docker run --rm`은 데이터 확인용 임시 컨테이너를 종료 후 자동 삭제함.
+- `MSYS_NO_PATHCONV=1`은 UCRT64/Git Bash의 경로 자동 변환을 방지하기 위한 설정임.
+
+### 12-4. 실행 증거
+
+![볼륨 생성 및 데이터 저장/컨테이너 삭제후 볼륨 데이터 보존](images/12_01_volume_conservation_after_deleting_container.png)
+
+
 
 ---
 
