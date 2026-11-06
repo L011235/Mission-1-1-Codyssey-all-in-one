@@ -1,6 +1,4 @@
-아래 전체(1~16절)를 통째로 드립니다. 코드 블록 안을 **전부 복사 → `README.md`로 저장**하면 됩니다. 😊
-
-> ⚠️ 중요: `(여기에 실제 실행 결과 붙여넣기)` 부분은 **본인 터미널 출력**으로 교체하세요. 제가 결과를 지어낼 수는 없습니다.
+아래 전체(1~16절)를 통째로 드립니다. 코드 블록 안을 **전부 복사 → `README.md`로 저장**하면 됩니다.
 
 
 # 과제 1-1 — 리눅스 커널 기반 개발 워크스테이션 구축
@@ -35,6 +33,22 @@
 - 실행 순서: **① 호스트 준비 → ② 우분투 컨테이너 진입 → ③ 우분투 내부 작업**
 
 ---
+```text
+Mission-1-1-Codyssey-all-in-one/
+│
+├── README.md
+│
+└── images/
+    ├── 02_01_Version_Check.png
+    ├── 02_02_Info_Summary.png
+    ├── 04_Linux_Commands_01.png
+    ├── 04_Linux_Commands_05(touch).png
+    ├── 04_Linux_Commands_06(echo_cat).png
+    ├── 04_Linux_Commands_07(echo_cp).png
+    ├── 04_Linux_Commands_08(mv).png
+    ├── 04_Linux_Commands_09(rm).png
+    └── ...
+```
 
 ## 2. 실행 환경
 
@@ -1029,8 +1043,8 @@ d7a7b8974b4a   ubuntu:latest   "/bin/bash"   41 seconds ago   Up 37 seconds     
 docker exec -it my_container bash
 
 # [컨테이너 내부셸] 내부에서 새로운 파일 생성 (가변성 확인)
-echo "Hello Docker" > /hello.txt
-cat /hello.txt
+echo "Hello Docker" > /Hello.txt
+cat /Hello.txt
 
 # [컨테이너 내부셸] exit 입력하여 호스트(Git Bash)로 복귀
 exit
@@ -1355,10 +1369,73 @@ af369df8d36567a5c9f36800a54d59365d97ec31bb845860b7cb5f967cdb7d22
 ---
 
 ## 10. 포트 매핑 접속 증거
+### 10-1. 네트워크 네임스페이스와 포트 매핑 원리
+
+#### ① 네트워크 네임스페이스(Network Namespace)
+
+Docker 컨테이너는 호스트와 분리된 독립적인 네트워크 환경인 네트워크 네임스페이스를 사용한다.
+
+각 컨테이너는 독립적인 네트워크 인터페이스와 IP 주소, 포트 공간 등을 가지므로 호스트와 구분되는 네트워크 환경에서 실행된다.
+
+#### ② 포트 매핑(Port Mapping)
+
+컨테이너 내부의 서비스에 호스트에서 접근하려면 포트 매핑이 필요하다.
+
+Docker의 `-p` 옵션은 호스트의 포트와 컨테이너의 포트를 연결하여 외부 요청이 컨테이너 내부 서비스에 전달되도록 설정한다.
+
+**포트 매핑 형식**
+
+```bash
+docker run -d -p 호스트포트:컨테이너포트 <이미지명>
+```
+
+**실습 적용 예시**
+
+```bash
+docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
+```
+
+| 구분 | 포트 | 역할 |
+|---|---:|---|
+| 호스트 포트 | 8080 | 호스트에서 접속하는 포트 |
+| 컨테이너 포트 | 80 | 컨테이너 내부 Nginx가 사용하는 포트 |
+
+**요청 전달 과정**
+
+```text
+[호스트 PC]
+브라우저 또는 curl
+http://localhost:8080
+        |
+        ▼
+[Docker 포트 게시 설정]
+호스트 8080 → 컨테이너 80
+        |
+        ▼
+[컨테이너 네트워크 네임스페이스]
+Nginx 웹서버 (80번 포트)
+        |
+        ▼
+웹페이지 응답 반환
+```
+
+#### ③ EXPOSE와 -p 옵션의 차이
+
+| 구분 | 기능 |
+|---|---|
+| `EXPOSE 80` | 이미지에서 사용하는 포트를 문서화 |
+| `-p 8080:80` | 호스트 8080 포트를 컨테이너 80 포트에 실제 게시 |
+
+`EXPOSE`만으로는 호스트에서 컨테이너에 접속할 수 있도록 포트가 자동으로 게시되지 않는다.
+
+### 10-2. 포트 매핑 실행 및 접속 확인
 ```bash
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 $ curl http://localhost:8080
 ```
+
+### 10-3. 실행 결과 및 검증
+##### 실행 결과
 ```text
 User@4F-16 UCRT64 ~/practice
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
