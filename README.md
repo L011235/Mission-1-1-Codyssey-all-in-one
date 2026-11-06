@@ -1053,18 +1053,17 @@ exit
 ```text
 # 실행 중인 컨테이너 내부의 Bash 셸로 접속
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-
 $ docker exec -it my_container bash
 # [컨테이너 내부셸] 내부에서 새로운 파일 생성 (가변성 확인)
-root@ffdeaba3f356:/# echo "Hello Docker" > /Hello.txt
-root@ffdeaba3f356:/# cat /Hello.txt
-root@ffdeaba3f356:/# ls
-Hello.txt  boot  etc   lib    media  opt   root  sbin  sys  usr
-bin        dev   home  lib64  mnt    proc  run   srv   tmp  var
+root@a9484c76d213:/# echo "Hello Docker" > /hello.txt
+root@a9484c76d213:/# cat /hello.txt
+Hello Docker
+root@a9484c76d213:/# ls
+bin   dev  hello.txt  lib    media  opt   root  sbin  sys  usr
+boot  etc  home       lib64  mnt    proc  run   srv   tmp  var
 # [컨테이너 내부셸] exit 입력하여 호스트(Git Bash)로 복귀
-root@ffdeaba3f356:/# exit
+root@a9484c76d213:/# exit
 exit
-
 ```
 ##### 스크린샷
 ![Docker_run_container내부명령](images/08_02_03_Docker_exec_container_internal.png)
@@ -1084,11 +1083,9 @@ user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ export MSYS_NO_PATHCONV=1
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -it --name new_container ubuntu:latest cat /hello.txt
+$ docker run -it --name my_container ubuntu:latest cat /hello.txt
 cat: /hello.txt: No such file or directory
 # 위 에러 문구가 원본 이미지(설계도)는 전혀 수정되지 않았음을 증명 (불변성)
-
-
 ```
 ##### 스크린샷
 ![Docker 이미지 불변성](images/08_02_04_Docker_run_new_container.png)
@@ -1117,6 +1114,35 @@ docker rm my_container new_container
 docker rmi ubuntu:latest
 ```
 ##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stop my_container
+my_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rm my_container new_container
+my_container
+new_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -it --name my_container ubuntu:latest cat /hello.txt
+cat: /hello.txt: No such file or directory
+
+What's next:
+    Debug this container error with Gordon → docker ai "help me fix this container error"
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rm my_container
+my_container
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker rmi ubuntu:latest
+Untagged: ubuntu:latest
+Deleted: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+
+
+```
+
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice
 $ export MSYS_NO_PATHCONV=1
