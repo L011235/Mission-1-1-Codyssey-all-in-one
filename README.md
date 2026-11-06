@@ -1705,19 +1705,98 @@ branch 'main' set up to track 'origin/main'.
 > 최소 2건 이상. 형식: 문제 → 원인 가설 → 확인 방법 → 해결
 
 ### 사례 1. (예: 포트 충돌로 컨테이너 실행 실패)
-- **문제**: `docker run -p 8080:80` 실행 시 `port is already allocated` 발생
-- **원인 가설**: 8080 포트를 다른 컨테이너/프로세스가 선점
-- **확인 방법**: `docker ps` / `lsof -i:8080` 로 점유 프로세스 확인
-- **해결**: 기존 컨테이너 중지(`docker stop`) 또는 다른 포트(`-p 8081:80`) 사용
+- **문제**: `docker exec -it my_container cat /hello.txt` 실행 시 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 변환되어 파일을 찾지 못함
+- **원인**: Git Bash(MSYS)의 자동 경로 변환 기능이 컨테이너 내부 Linux 경로를 Windows 경로로 변경함
+- **확인 방법**: 오류 메시지에서 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 바뀐 것을 확인
+- **해결**: `export MSYS_NO_PATHCONV=1'를 먼저 선언하고 docker exec -it my_container cat /hello.txt` 실행
+- **해결 결과**: 경로 변환 없이 컨테이너 내부의 `/hello.txt`에 접근하여 `Hello Docker` 출력 확인
 
-### 사례 2. (예: 바인드 마운트 변경이 반영되지 않음)
-- **문제**: 호스트 파일을 수정해도 컨테이너에 반영 안 됨
-- **원인 가설**: 마운트 경로 오타 / 상대경로 문제
-- **확인 방법**: `docker inspect <container>` 의 Mounts 항목 확인
-- **해결**: 절대경로(`$(pwd)/site`)로 재지정 후 재실행
+#### 실행결과 (오류)
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker run -dit --name my_container ubuntu
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+f3f25b84a7d7: Pull complete
+edafa32f5d9e: Pull complete
+21594acc2d8b: Download complete
+Digest: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+Status: Downloaded newer image for ubuntu:latest
+c07e12e4e8338517c7e08159c69497661c14d49d3e77f7489ced175bdcd69925
 
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec -it my_container bash
+root@c07e12e4e833:/# echo "Hello Docker" > /hello.txt
+root@c07e12e4e833:/# cat /hello.txt
+Hello Docker
+root@c07e12e4e833:/# exit
+exit
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec -it my_container cat /hello.txt
+cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+```
+#### 실행결과 (해결)
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker run -dit --name my_container ubuntu
+f6794862b9955510a2aaa097d429d5d74cedbc9eb692b542a7d69b545316f117
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ export MSYS_NO_PATHCONV=1
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec -it my_container bash
+root@f6794862b995:/# echo "Hello Docker" > /hello.txt
+root@f6794862b995:/# cat /hello.txt
+Hello Docker
+root@f6794862b995:/# exit
+exit
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec -it my_container cat /hello.txt
+Hello Docker
+```
+
+### 사례 2. docker exec에서 출력 리다이렉션 위치 오류
+
+- **문제**: `docker exec -it my_container echo "hello again" > /again.txt` 실행 시 `bash: /again.txt: Permission denied` 발생
+- **원인**: `>`를 컨테이너 내부가 아닌 호스트 Git Bash가 처리하여 호스트의 `/again.txt`에 쓰기를 시도함
+- **확인 방법**: 오류 메시지의 `bash:`를 확인하고, `>`가 호스트 셸에서 해석되는 명령 구조임을 확인
+- **해결**: `docker exec my_container sh -c 'echo "hello again" > /again.txt'` 실행
+- **해결 결과**: 컨테이너 내부에 `/again.txt`가 생성되고 `cat /again.txt`로 `hello again` 출력 확인
 > ⚠️ 위는 형식 예시입니다. **실제로 겪은 문제 2건**으로 교체하세요.
 
+#### 실행결과 (오류)
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -dit --name my_container ubuntu
+4d65ecc4b2edd66eb36a17526d4d7afb9d24123f0fce312664eb5300db69d032
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec -it my_container echo "hello again" > /again.txt
+bash: /again.txt: Permission denied
+```
+
+#### 실행결과 (해결)
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -dit --name new_container ubuntu
+6997503ce8ff0ee4340ac43d0c0bd119a98f00920e355cb3db28a5b5870dc68b
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec new_container sh -c 'echo "hello again" > /again.txt'
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec -it new_container cat /again.txt
+hello again
+```
 ---
 
 ## 14. 재현성
