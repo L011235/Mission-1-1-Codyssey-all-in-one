@@ -1566,9 +1566,8 @@ $ git config --global user.name "본인이름"
 $ git config --global user.email "abc@example.com"   # 공개 저장소면 마스킹 권장
 $ git config --list
 
-$ git init
 $ git remote add origin https://github.com/<user>/<repo>.git
-$ git add .
+$ git add -u
 $ git commit -m "feat:  과제수행 "
 $ git push -u origin main
 ```
@@ -1628,22 +1627,8 @@ user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git commit -m "미션 1-1 과제수행"
 [main 805a1a8] 미션 1-1 과제수행
  1 file changed, 88 insertions(+), 3 deletions(-)
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ git push -u origin main
-Enumerating objects: 5, done.
-Counting objects: 100% (5/5), done.
-Delta compression using up to 20 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 1.26 KiB | 1.26 MiB/s, done.
-Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
-   2e95954..805a1a8  main -> main
-branch 'main' set up to track 'origin/main'.
 ```
-##### 스크린샷
-![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
+
 > push 성공 로그 첨부
 ##### push 성공 로그
 ```text
@@ -1660,6 +1645,9 @@ To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
    2e95954..805a1a8  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+##### 스크린샷
+![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
+
 ---
 
 ## 14. 트러블슈팅
