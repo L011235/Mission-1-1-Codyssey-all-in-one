@@ -1331,34 +1331,36 @@ init.defaultbranch=master
 user.email=a**@e******.com
 user.name=Se**** J***
 
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ git init
-Initialized empty Git repository in C:/Users/user/Practice/.git/
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice (master)
-$ git remote add origin https://github.com/L011235/Mission-1-1-Codyssey-all-in-
-one
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice (master)
-$ cd Mission-1-1-Codyssey-all-in-one
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git remote add origin https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ git add .
+$ git remote -v
+origin  https://github.com/L011235/Mission-1-1-Codyssey-all-in-one (fetch)
+origin  https://github.com/L011235/Mission-1-1-Codyssey-all-in-one (push)
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git status
 On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   README.md
-
+nothing to commit, working tree clean
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ git commit -m "1-1 과제수행"
-[main 2e95954] 1-1 과제수행
- 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git add -u
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git commit -m "미션 1-1 과제수행"
+[main 805a1a8] 미션 1-1 과제수행
+ 1 file changed, 88 insertions(+), 3 deletions(-)
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git push -u origin main
@@ -1366,18 +1368,17 @@ Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 20 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 323 bytes | 323.00 KiB/s, done.
+Writing objects: 100% (3/3), 1.26 KiB | 1.26 MiB/s, done.
 Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one.git
-   a0a9e26..2e95954  main -> main
+To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
+   2e95954..805a1a8  main -> main
 branch 'main' set up to track 'origin/main'.
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-
 ```
-> VSCode ↔ GitHub 연동 완료 스크린샷 또는 push 성공 로그 첨부
-##### push
+##### 스크린샷
+![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
+> push 성공 로그 첨부
+##### push 성공 로그
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git push -u origin main
@@ -1385,16 +1386,13 @@ Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 20 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 323 bytes | 323.00 KiB/s, done.
+Writing objects: 100% (3/3), 1.26 KiB | 1.26 MiB/s, done.
 Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one.git
-   a0a9e26..2e95954  main -> main
+To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
+   2e95954..805a1a8  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
-
-
-
 ---
 
 ## 14. 트러블슈팅
