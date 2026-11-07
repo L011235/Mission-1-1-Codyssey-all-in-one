@@ -41,9 +41,6 @@ Mission-1-1-Codyssey-all-in-one/
 ├── nginx.conf
 ├── index.html
 │
-├── archive/
-│   └── README001.md
-│
 └── images/
     └── 실습 스크린샷들
 
@@ -51,7 +48,6 @@ Mission-1-1-Codyssey-all-in-one/
 - [Dockerfile](./Dockerfile)
 - [nginx.conf](./nginx.conf)
 - [index.html](./index.html)
-- [이전 README](./archive/README001.md)
 - [실습 스크린샷](./images/)
 
 
@@ -1839,19 +1835,6 @@ hello again
 - **기존 리소스:** 같은 이름의 컨테이너가 이미 존재하면 실행 전에 상태를 확인하고 필요한 경우 정리한다. 볼륨은 컨테이너와 달리 별도로 유지되므로 삭제 여부를 확인한다. (7절, 10절, 11절)
 
 각 실습의 구체적인 실행 순서와 결과는 해당 절의 명령어 및 실행 로그를 기준으로 재현할 수 있다.
-
-| 항목 | 본 과제 값 | 대체 방법 |
-| --- | --- | --- |
-| 작업 경로 | (예) `/home/user/practice` | 임의 디렉터리에서 `mkdir practice` 후 동일 수행 |
-| 바인드 경로 | `$(pwd)/site` | 본인 프로젝트 경로로 치환 |
-| 포트 | 8080 | 점유 시 8081 등으로 변경 |
-| 이미지 태그 | `my-web:1.0` | 자유 지정 가능 |
-
-재현 절차 요약:
-1. 저장소 클론 → `git clone <repo>`
-2. `docker build -t my-web:1.0 .`
-3. `docker run -d -p 8080:80 my-web:1.0`
-4. `curl http://localhost:8080` 로 확인
 
 ---
 
