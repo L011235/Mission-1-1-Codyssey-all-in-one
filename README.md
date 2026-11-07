@@ -27,9 +27,12 @@
 ## 1. 프로젝트 개요
 - 리눅스 커널 기반(우분투 컨테이너) 개발 워크스테이션을 구축하고,
   터미널·권한·Docker·포트·마운트·볼륨·Git/GitHub 전 과정을 수행·검증한다.
-- 실행 순서: **① 호스트 준비 → ② 우분투 컨테이너 진입 → ③ 우분투 내부 작업**
-
 ---
+**GitHub 저장소:** https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
+- **제출 문서:** [README.md](./README.md)
+- **프로젝트 파일:** [Dockerfile](./Dockerfile) / [nginx.conf](./nginx.conf) / [index.html](./index.html)
+- **실습 증거:** [images 폴더](./images/)
+
 ```text
 Mission-1-1-Codyssey-all-in-one/
 │
