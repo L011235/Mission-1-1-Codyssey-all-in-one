@@ -252,50 +252,50 @@ Server:
 > (바인드 마운트는 요구사항 9번(볼륨 영속성)에 포함하여 함께 검증한다.)
 
 ### 1. 제출 저장소 및 기술 문서
-- [ ] 1-1. GitHub 저장소 링크로 제출 + 개요/환경/체크리스트/검증방법 포함
-- [ ] 1-2. 프로젝트 개요 및 재현성 → [1. 프로젝트 개요](#1-프로젝트-개요) / [14. 재현환경 및 실행 시 주의사항](#14-재현환경-및-실행-시-주의사항)
+- [x] 1-1. GitHub 저장소 링크로 제출 + 개요/환경/체크리스트/검증방법 포함
+- [x] 1-2. 프로젝트 개요 및 재현성 → [1. 프로젝트 개요](#1-프로젝트-개요) / [14. 재현환경 및 실행 시 주의사항](#14-재현환경-및-실행-시-주의사항)
 
 ### 2. 터미널 조작 명령어
-- [ ] 2-1. pwd / ls -la(숨김 포함) / mkdir / cp / mv / 이름변경 / rm / cat / touch 수행
-- [ ] 2-2. 터미널 조작 → [4. 터미널 조작 명령어](#4-터미널-조작-명령어)
+- [x] 2-1. pwd / ls -la(숨김 포함) / mkdir / cp / mv / 이름변경 / rm / cat / touch 수행
+- [x] 2-2. 터미널 조작 → [4. 터미널 조작 명령어](#4-터미널-조작-명령어)
 
 ### 3. 권한 실습 및 증거 기록
-- [ ] 3-1. 파일 1개 + 디렉터리 1개 권한 변경 전/후 비교
-- [ ] 3-2. 파일 권한 실습 → [5. 파일 권한 실습](#5-파일-권한-실습)
+- [x] 3-1. 파일 1개 + 디렉터리 1개 권한 변경 전/후 비교
+- [x] 3-2. 파일 권한 실습 → [5. 파일 권한 실습](#5-파일-권한-실습)
 
 ### 4. Docker 설치 및 기본 점검
-- [ ] 4-1. docker --version / docker info(또는 동등 점검) 확인
-- [ ] 4-2. Docker 설치 및 점검 → [2. 실행 환경](#2-실행-환경)
+- [x] 4-1. docker --version / docker info(또는 동등 점검) 확인
+- [x] 4-2. Docker 설치 및 점검 → [2. 실행 환경](#2-실행-환경)
 
 ### 5. Docker 기본 운영 명령 수행
-- [ ] 5-1. docker images / ps / ps -a / logs / stats 실행
-- [ ] 5-2. 실행결과 → [6. Docker 기본 운영 명령](#6-docker-기본-운영-명령)
+- [x] 5-1. docker images / ps / ps -a / logs / stats 실행
+- [x] 5-2. 실행결과 → [6. Docker 기본 운영 명령](#6-docker-기본-운영-명령)
 
 ### 6. 컨테이너 실행 실습
-- [ ] 6-1. hello-world 성공 + ubuntu 진입 후 ls/echo + attach/exec 차이 관찰
-- [ ] 6-2. 실행결과 → [7. 컨테이너 실행 실습](#7-컨테이너-실행-실습)
+- [x] 6-1. hello-world 성공 + ubuntu 진입 후 ls/echo + docker run -it/docker exec -it 차이 관찰
+- [x] 6-2. 실행결과 → [7. 컨테이너 실행 실습](#7-컨테이너-실행-실습)
 
 ### 7. 기존 Dockerfile 기반 커스텀 이미지 제작
-- [ ] 7-1. 베이스 선택(A/B) + 커스텀 포인트 목적 + 빌드·실행 성공
-- [ ] 7-2. 실행결과 → [8. Dockerfile 커스텀 이미지](#8-dockerfile-커스텀-이미지)
+- [x] 7-1. 베이스 선택(A/B) + 커스텀 포인트 목적 + 빌드·실행 성공
+- [x] 7-2. 실행결과 → [8. Dockerfile 커스텀 이미지](#8-dockerfile-커스텀-이미지)
 
 ### 8. 포트 매핑 및 접속 증거
-- [ ] 8-1. -p <host>:<container> 실행 + 브라우저(주소창+포트) 또는 curl 응답 확인
-- [ ] 8-2. 포트 매핑 → [9. 포트 매핑 접속 증거](#9-포트-매핑-접속-증거)
+- [x] 8-1. -p <host>:<container> 실행 + 브라우저(주소창+포트) 또는 curl 응답 확인
+- [x] 8-2. 포트 매핑 → [9. 포트 매핑 접속 증거](#9-포트-매핑-접속-증거)
 
 ### 9. Docker 볼륨 영속성 검증 (+ 바인드 마운트)
-- [ ] 9-1. (바인드) 호스트 변경 → 컨테이너 반영 전/후 비교
-- [ ] 9-2. 바인드 실행결과 → [10. 바인드 마운트 반영](#10-바인드-마운트-반영)
-- [ ] 9-3. (볼륨) 생성/연결 후 컨테이너 삭제 전/후 데이터 유지 증명
-- [ ] 9-4. 볼륨 실행결과 → [11. 볼륨 영속성 검증](#11-볼륨-영속성-검증)
+- [x] 9-1. (바인드) 호스트 변경 → 컨테이너 반영 전/후 비교
+- [x] 9-2. 바인드 실행결과 → [10. 바인드 마운트 반영](#10-바인드-마운트-반영)
+- [x] 9-3. (볼륨) 생성/연결 후 컨테이너 삭제 전/후 데이터 유지 증명
+- [x] 9-4. 볼륨 실행결과 → [11. 볼륨 영속성 검증](#11-볼륨-영속성-검증)
 
 ### 10. Git 설정 및 GitHub 연동
-- [ ] 10-1. git config --list + GitHub 로그인·VSCode 저장소 연동 완료
-- [ ] 10-2. 실행결과 → [12. Git 설정 및 GitHub 연동](#12-git-설정-및-github-연동)
+- [x] 10-1. git config --list + GitHub 로그인·VSCode 저장소 연동 완료
+- [x] 10-2. 실행결과 → [12. Git 설정 및 GitHub 연동](#12-git-설정-및-github-연동)
 
 ### 11. 보안 및 개인정보 보호
-- [ ] 11-1. 토큰/이메일/비밀번호/인증코드 마스킹 확인
-- [ ] 11-2. 실행 결과 → [15. 보안 및 개인정보 보호](#15-보안-및-개인정보-보호)
+- [x] 11-1. 토큰/이메일/비밀번호/인증코드 마스킹 확인
+- [x] 11-2. 실행 결과 → [15. 보안 및 개인정보 보호](#15-보안-및-개인정보-보호)
 
 ---
 
@@ -1543,7 +1543,7 @@ $ curl http://localhost:8080
 
         <div class="info">
             <strong>Server Information:</strong><br>
-            Image: my-custom-nginx:1.0<br>
+            Image: my-web:1.0<br>
             Base: nginx:alpine<br>
             Status: ✅ Running
         </div>
@@ -2257,16 +2257,27 @@ f5c4c2e Docker파일관련 업데이트
 > 최소 2건 이상. 형식: 문제 → 원인 가설 → 확인 방법 → 해결
 
 ### 사례 1. Git Bash의 경로 자동 변환으로 컨테이너 파일 접근 실패
-- **문제**: `docker exec -it my_container cat /hello.txt` 실행 시 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 변환되어 파일을 찾지 못함
-- **원인**: Git Bash(MSYS)의 자동 경로 변환 기능이 컨테이너 내부 Linux 경로를 Windows 경로로 변경함
-- **확인 방법**: 오류 메시지에서 `/hello.txt`가 `C:/Program Files/Git/hello.txt`로 바뀐 것을 확인
-- **해결**: `export MSYS_NO_PATHCONV=1`를 먼저 선언하고 `docker exec -it my_container cat /hello.txt` 실행
-- **해결 결과**: 경로 변환 없이 컨테이너 내부의 `/hello.txt`에 접근하여 `Hello Docker` 출력 확인
+#### 1-1. 문제 재현 및 오류 확인
+컨테이너 내부에 파일을 생성합니다.
+docker run -dit --name path-test ubuntu
 
-#### 실행결과 (오류)
+docker exec -it path-test bash
+echo "Hello Docker" > /hello.txt
+cat /hello.txt
+exit
+
+이후 Git Bash에서 다음 명령을 실행합니다.
+docker exec -it path-test cat /hello.txt
+
+기존 실습에서는 다음 오류가 발생했습니다.
+cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+
+설명: 컨테이너 내부 경로 /hello.txt가 Docker에 전달되기 전에 Git Bash의 MSYS 경로 자동 변환 기능에 의해 Windows 경로로 변경된 것입니다.
+
+#### 실행결과 (오류재현)
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker run -dit --name my_container ubuntu
+$ docker run -dit --name path_test ubuntu
 Unable to find image 'ubuntu:latest' locally
 latest: Pulling from library/ubuntu
 f3f25b84a7d7: Pull complete
@@ -2274,81 +2285,90 @@ edafa32f5d9e: Pull complete
 21594acc2d8b: Download complete
 Digest: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
 Status: Downloaded newer image for ubuntu:latest
-c07e12e4e8338517c7e08159c69497661c14d49d3e77f7489ced175bdcd69925
+c145658a02ff55c730b6245e9726f1d129f89477edffc5f14a244c48d4b5e5af
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker exec -it my_container bash
-root@c07e12e4e833:/# echo "Hello Docker" > /hello.txt
-root@c07e12e4e833:/# cat /hello.txt
+$ docker exec -it path_test bash
+root@c145658a02ff:/# echo "Hello Docker" > /hello.txt
+root@c145658a02ff:/# cat hello.txt
 Hello Docker
-root@c07e12e4e833:/# exit
+root@c145658a02ff:/# exit
 exit
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker exec -it my_container cat /hello.txt
+$ docker exec -it path_test cat /hello.txt
 cat: 'C:/Program Files/Git/hello.txt': No such file or directory
+```
+#### 스크린샷 (오류재현)
+![오류재현](images/13_trubleshooting_01_01_error.png)
+
+> 컨테이너 내부 경로 /hello.txt가 Docker에 전달되기 전에 Git Bash의 MSYS 경로 자동 변환 기능에 의해 Windows 경로(c:/Program Files/Git/hell.txt)로 변경된 것입니다.
+
+#### 1-2. 해결 방법 적용
+```bash
+export MSYS_NO_PATHCONV=1
+
+docker exec -it path-test cat /hello.txt
 ```
 #### 실행결과 (해결)
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker run -dit --name my_container ubuntu
-f6794862b9955510a2aaa097d429d5d74cedbc9eb692b542a7d69b545316f117
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ export MSYS_NO_PATHCONV=1
 
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker exec -it my_container bash
-root@f6794862b995:/# echo "Hello Docker" > /hello.txt
-root@f6794862b995:/# cat /hello.txt
-Hello Docker
-root@f6794862b995:/# exit
-exit
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
-$ docker exec -it my_container cat /hello.txt
+$ docker exec -it path_test cat /hello.txt
 Hello Docker
 ```
+![오류해결](images/13_trubleshooting_01_02_resolved.png)
+
+>MSYS_NO_PATHCONV=1은 Git Bash의 자동 경로 변환을 비활성화하여 Linux 경로가 Docker 명령에 그대로 전달되도록 합니다.
 
 ### 사례 2. docker exec에서 출력 리다이렉션 위치 오류
 
-- **문제**: `docker exec -it my_container echo "hello again" > /again.txt` 실행 시 `bash: /again.txt: Permission denied` 발생
-- **원인**: `>`를 컨테이너 내부가 아닌 호스트 Git Bash가 처리하여 호스트의 `/again.txt`에 쓰기를 시도함
-- **확인 방법**: 오류 메시지의 `bash:`를 확인하고, `>`가 호스트 셸에서 해석되는 명령 구조임을 확인
-- **해결**: `docker exec my_container sh -c 'echo "hello again" > /again.txt'` 실행
-- **해결 결과**: 컨테이너 내부에 `/again.txt`가 생성되고 `cat /again.txt`로 `hello again` 출력 확인
 
-
-#### 실행결과 (오류)
+#### 2-1. 문제 재현 및 오류 확인
+실행 중인 Ubuntu 컨테이너를 준비
+##### 실행 결과
 ```text
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ export MSYS_NO_PATHCONV=1
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker run -dit --name redirect-test ubuntu
+07fb859d29aa1f74920cdf4f49b31218f32a5aaa92a47c9aa1c1580a89b0a74d
 
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -dit --name my_container ubuntu
-4d65ecc4b2edd66eb36a17526d4d7afb9d24123f0fce312664eb5300db69d032
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker exec -it my_container echo "hello again" > /again.txt
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec -it redirect-test echo "hello again" > /again.txt
 bash: /again.txt: Permission denied
 ```
+##### 스크린샷
+![오류재현](images/13_trubleshooting_02_01_error.png)
+> `docker exe 리다이렉션은 docker exec가 아니라 호스트 Git Bash에서 처리된다. 따라서 컨테이너 내부의 /again.txt에 쓰는 것이 아니라 호스트 경로에 파일을 쓰려고 시도한 것임.
+### 2-2. 원인 확인
 
-#### 실행결과 (해결)
+리다이렉션이 어디에서 해석되는지 비교하면 다음과 같다.
+
+| 명령 형태 | `>` 처리 주체 | 결과 |
+|---|---|---|
+| `docker exec ... echo "hello" > /again.txt` | 호스트 Git Bash | 호스트에 파일 쓰기 시도 |
+| `docker exec ... sh -c 'echo "hello" > /again.txt'` | 컨테이너 내부 셸 | 컨테이너 내부에 파일 생성 |
+
+
+### 2-3. 해결 방법 적용
+컨테이너 내부에서 셸을 실행하고, 그 셸이 리다이렉션을 처리하도록 변경 후 확인.
+```bash
+docker exec redirect-test sh -c 'echo "hello again" > /again.txt'
+docker exec redirect-test cat /again.txt
+```
+#### 실행결과
 ```text
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ export MSYS_NO_PATHCONV=1
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec redirect-test sh -c 'echo "hello again" > /again.txt'
 
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker run -dit --name new_container ubuntu
-6997503ce8ff0ee4340ac43d0c0bd119a98f00920e355cb3db28a5b5870dc68b
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker exec new_container sh -c 'echo "hello again" > /again.txt'
-
-user@DESKTOP-KTF7H73 UCRT64 ~/practice
-$ docker exec -it new_container cat /again.txt
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker exec redirect-test cat /again.txt
 hello again
 ```
+#### 스크린샷
+![문제해결](images/13_trubleshooting_02_02_resolved.png)
+
 ---
 ### 사례 3. 포트 충돌 이후 컨테이너 재시작 시 호스트 포트 게시 실패
 
@@ -2409,7 +2429,7 @@ exit
 
 검증 결과: 컨테이너 내부 진입과 Nginx 설정 검사는 성공했으며, Nginx 프로세스도 정상 실행 중이었다. 그러나 호스트에서 curl -I http://localhost:8080을 실행했을 때 접속에 실패하였다.
 
-4. 포트 설정과 실제 활성 상태 비교
+#### 3-4. 포트 설정과 실제 활성 상태 비교
 
 컨테이너의 포트 설정 및 실제 네트워크 연결 상태를 확인하였다.
 
@@ -2423,14 +2443,14 @@ exit
 
 이번 실습 환경에서는 `docker start`로 컨테이너를 재시작하고 내부 Nginx를 정상 구동하는 데는 성공했지만, 호스트 8080 포트 연결은 복구되지 않았다.
 
-5. 포트 해제 확인
+#### 3-5. 포트 해제 확인
 
 docker ps --filter "publish=8080"
 netstat -ano | grep :8080
 
 확인 결과 두 명령 모두 출력이 없어 Docker 컨테이너와 Windows 호스트에서 8080 포트가 더 이상 수신 대기 상태가 아님을 확인하였다.
 
-6. 해결 방향
+#### 3-6. 해결 방향
 
 기존 컨테이너의 실행 상태만 복구하는 것으로는 호스트 포트 접속 문제가 해결되지 않았다.
 
@@ -2445,8 +2465,7 @@ docker port new-web
 curl -I http://localhost:8080
 curl http://localhost:8080
 
-위 재생성 및 웹 접속 검증은 실제 실행 결과를 추가한다.
-
+##### 실행결과
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ docker build -t my-web:1.0 .
@@ -2574,7 +2593,7 @@ $ curl http://localhost:8080
 ![새컨테이너 8080p](images/09_04_07_run_new_container_8080.png)
 
 
-#### 배운 것들
+##### 배운 것들
 
 포트 충돌이 발생하면 컨테이너가 Created 상태로 남을 수 있음을 확인하였다.
 
