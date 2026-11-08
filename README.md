@@ -2220,6 +2220,9 @@ To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
    2e95954..805a1a8  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+##### 스크린샷
+![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
+
 ##### push 성공 로그 (git log)
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
@@ -2247,7 +2250,6 @@ f5c4c2e Docker파일관련 업데이트
 
 ```
 ##### 스크린샷
-![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
 ![Git log](images/12_02_git_log.png)
 ---
 
@@ -2348,17 +2350,242 @@ $ docker exec -it new_container cat /again.txt
 hello again
 ```
 ---
-### 사례 3. 포트 충돌 진단
-#### 1. 포트 점유 프로세스 및 컨테이너 진단 결과
+### 사례 3. 포트 충돌 이후 컨테이너 재시작 시 호스트 포트 게시 실패
 
-| 확인 항목 | 실제 결과 | 의미 |
-|---|---|---|
-| Docker 컨테이너 | `old-web` 실행 중 | 호스트 8080 포트 점유 |
-| 컨테이너 포트 연결 | `80 → 8080` | 호스트 8080을 컨테이너 80에 연결 |
-| PID 30660 | `com.docker.backend.exe` | Docker Desktop 백엔드 프로세스 |
-| PID 23884 | `wslrelay.exe` | WSL 네트워크 릴레이 프로세스 |
+#### 3-1. 문제 상황
 
-**진단 결과:** Docker 명령으로 `old-web`이 8080 포트를 게시하고 있음을 확인했으며, Windows의 `netstat` 및 `tasklist`로 관련 프로세스도 확인하였다.
+호스트의 8080 포트를 old-web 컨테이너가 점유한 상태에서 동일한 포트를 사용하는 new-web 컨테이너를 실행하여 포트 충돌이 발생하였다.
+
+두 번째 컨테이너는 생성되었으나 실행에 실패하여 Created 상태로 남았다.
+
+#### 3-2. 원인 확인
+
+① Docker 컨테이너의 포트 점유 확인
+
+docker ps --filter "publish=8080"
+docker port old-web
+
+확인 결과 old-web이 호스트의 8080 포트를 컨테이너 내부 80번 포트에 연결하여 사용 중이었다.
+
+② Windows 호스트의 포트 점유 프로세스 확인
+
+netstat -ano | grep :8080
+
+실행 결과:
+
+TCP    0.0.0.0:8080     0.0.0.0:0     LISTENING     30660
+TCP    127.0.0.1:8080   0.0.0.0:0     LISTENING     23884
+TCP    [::]:8080        [::]:0        LISTENING     30660
+TCP    [::1]:8080       [::]:0        LISTENING     23884
+
+PID별 프로세스를 확인한 결과:
+
+PID 30660 : com.docker.backend.exe
+PID 23884 : wslrelay.exe
+
+Docker Desktop 백엔드 및 WSL 네트워크 릴레이 프로세스가 포트 게시와 관련되어 있음을 확인하였다.
+
+#### 3-3. 기존 점유 컨테이너 제거 및 재시작 검증
+
+기존 포트 점유 컨테이너 old-web을 중지하고 삭제하였다.
+
+docker stop old-web
+docker rm old-web
+
+이후 기존에 생성된 new-web을 삭제하지 않고 재시작하였다.
+
+docker start new-web
+docker ps -a --filter "name=^/new-web$"
+
+확인 결과 new-web은 Up 상태로 전환되었다.
+
+컨테이너 내부 진입 및 Nginx 설정 검사를 수행하였다.
+
+docker exec -it new-web sh
+
+nginx -t
+ps
+exit
+
+검증 결과: 컨테이너 내부 진입과 Nginx 설정 검사는 성공했으며, Nginx 프로세스도 정상 실행 중이었다. 그러나 호스트에서 curl -I http://localhost:8080을 실행했을 때 접속에 실패하였다.
+
+4. 포트 설정과 실제 활성 상태 비교
+
+컨테이너의 포트 설정 및 실제 네트워크 연결 상태를 확인하였다.
+
+| 항목 | 결과 | 의미 |
+| :--- | :--- | :--- |
+| **Configured** | `{"80/tcp":[{"HostIp":"","HostPort":"8080"}]}` | 컨테이너 생성 당시 요청한 포트 매핑 설정이 보존됨 |
+| **Active** | `{"80/tcp":[]}` | 실제 활성화된 호스트 포트 연결이 없음 |
+| **docker port new-web** | 출력 없음 | 활성화된 포트 게시가 확인되지 않음 |
+
+**원인 분석:** `HostConfig.PortBindings`에는 생성 당시의 포트 매핑 설정이 남아 있었으나, `NetworkSettings.Ports`에는 실제 활성 연결이 표시되지 않았다. 즉, 포트 설정의 보존과 실제 포트 게시의 활성화가 서로 다른 상태임을 확인하였다.
+
+이번 실습 환경에서는 `docker start`로 컨테이너를 재시작하고 내부 Nginx를 정상 구동하는 데는 성공했지만, 호스트 8080 포트 연결은 복구되지 않았다.
+
+5. 포트 해제 확인
+
+docker ps --filter "publish=8080"
+netstat -ano | grep :8080
+
+확인 결과 두 명령 모두 출력이 없어 Docker 컨테이너와 Windows 호스트에서 8080 포트가 더 이상 수신 대기 상태가 아님을 확인하였다.
+
+6. 해결 방향
+
+기존 컨테이너의 실행 상태만 복구하는 것으로는 호스트 포트 접속 문제가 해결되지 않았다.
+
+따라서 기존 new-web을 제거한 후, 커스텀 이미지 my-web:1.0을 이용하여 포트 게시 설정을 새로 적용한 컨테이너를 생성하는 방식으로 해결을 진행한다.
+
+docker rm -f new-web
+
+docker run -d --name new-web -p 8080:80 my-web:1.0
+
+docker ps --filter "publish=8080"
+docker port new-web
+curl -I http://localhost:8080
+curl http://localhost:8080
+
+위 재생성 및 웹 접속 검증은 실제 실행 결과를 추가한다.
+
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker build -t my-web:1.0 .
+[+] Building 8.3s (9/9) FINISHED                                               docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                           0.6s
+ => => transferring dockerfile: 388B                                                           0.1s
+ => [internal] load metadata for docker.io/library/nginx:alpine                                0.9s
+ => [internal] load .dockerignore                                                              0.4s
+ => => transferring context: 2B                                                                0.0s
+ => [1/4] FROM docker.io/library/nginx:alpine@sha256:713fc2ebfd92e8217db451477182ee91944b123d  0.6s
+ => => resolve docker.io/library/nginx:alpine@sha256:713fc2ebfd92e8217db451477182ee91944b123d  0.5s
+ => [internal] load build context                                                              0.3s
+ => => transferring context: 62B                                                               0.0s
+ => CACHED [2/4] RUN apk add --no-cache curl                                                   0.0s
+ => CACHED [3/4] COPY nginx.conf /etc/nginx/nginx.conf                                         0.0s
+ => CACHED [4/4] COPY index.html /usr/share/nginx/html/index.html                              0.0s
+ => exporting to image                                                                         3.4s
+ => => exporting layers                                                                        0.0s
+ => => exporting manifest sha256:fc4127fbe650e17aa156d260b9264591cb084201b6b7c9364bc4778082d0  0.2s
+ => => exporting config sha256:4c744e5db1a2121153b6be3ba4bd000b8b383d30ea16ab23adaccd36a4474d  0.1s
+ => => exporting attestation manifest sha256:a44ff1a04b06abec08729bead70d807844b797e2d172c100  0.5s
+ => => exporting manifest list sha256:cbda215519c8a86e18fd5982bdb5ac319fa494f66c84b7bda3c8f6a  0.4s
+ => => naming to docker.io/library/my-web:1.0                                                  0.1s
+ => => unpacking to docker.io/library/my-web:1.0                                               1.6s
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker images my-web:1.0
+                                                                               i Info →   U  In Use
+IMAGE        ID             DISK USAGE   CONTENT SIZE   EXTRA
+my-web:1.0   cbda215519c8       93.9MB         26.4MB
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker rm -f new-web
+new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker run -d --name new-web -p 8080:80 my-web:1.0
+36236409ecab2004f560b4634c6775358c1657c6dc0dcb296bbea8ede941d2d5
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker ps --filter "publish=8080"
+CONTAINER ID   IMAGE        COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+36236409ecab   my-web:1.0   "/docker-entrypoint.…"   24 seconds ago   Up 22 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker port new-web
+80/tcp -> 0.0.0.0:8080
+80/tcp -> [::]:8080
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ curl -I http://localhost:8080
+HTTP/1.1 200 OK
+Server: nginx/1.31.8
+Date: Sun, 08 Nov 2026 05:35:26 GMT
+Content-Type: text/html
+Content-Length: 1659
+Last-Modified: Fri, 06 Nov 2026 23:15:22 GMT
+Connection: keep-alive
+ETag: "6aee5f8a-67b"
+Accept-Ranges: bytes
+
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ curl http://localhost:8080
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Custom Nginx</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 장**의 커스텀 Nginx 서버에 오신 것을 환영합니다.</h1>
+        <p>이것은 Docker로 빌드된 커스텀 nginx 컨테이너입니다.</p>
+        <p>서버가 컨테이너 내부에서 성공적으로 실행 중입니다.</p>
+
+        <div class="info">
+            <strong>Server Information:</strong><br>
+            Image: my-web:1.0<br>
+            Base: nginx:alpine<br>
+            Status: ✅ Running
+        </div>
+    </div>
+</body>
+</html>
+```
+##### 스크린샷
+![새컨테이너 8080p](images/09_04_07_run_new_container_8080.png)
+
+
+#### 배운 것들
+
+포트 충돌이 발생하면 컨테이너가 Created 상태로 남을 수 있음을 확인하였다.
+
+docker start로 컨테이너를 실행할 수 있어도 호스트 포트 게시까지 정상화되었다고 단정할 수 없음을 확인하였다.
+
+docker exec와 nginx -t를 통해 컨테이너 내부 서비스 상태를 독립적으로 검증하였다.
+
+docker inspect의 HostConfig.PortBindings와 NetworkSettings.Ports를 비교하여 설정 정보와 실제 네트워크 연결 상태를 구분하였다.
+
+Docker 명령과 Windows의 netstat, tasklist를 함께 사용하여 포트 점유 원인을 진단하였다.
+
 
 ## 14. 재현환경 및 실행 시 주의사항
 
