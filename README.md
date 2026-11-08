@@ -1210,8 +1210,124 @@ $
 docker stop test_ubuntu
 docker rm test_ubuntu
 ```
----
 
+#### 7-3-3 docker Images vs docker ps && docker ps -a
+```bash
+docker images
+docker ps
+docker ps -a
+docker stop <컨테이너명>
+docker container prune
+docker image prune -a
+```
+##### 실행결과
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker images
+                                                                                                                                                                                                                                                          i Info →   U  In Use
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+hello-world:latest   c567b231f656       25.9kB         9.49kB    U
+my-web:1.0           e94718a13fd2       93.9MB         26.4MB
+nginx:alpine         713fc2ebfd92       94.5MB         27.3MB
+nginx:latest         165ddde8751e        243MB         66.8MB    U
+ubuntu:latest        6a06111c3b0a        163MB         45.9MB    U
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker ps
+CONTAINER ID   IMAGE           COMMAND                   CREATED         STATUS          PORTS     NAMES
+33aa810e2130   ubuntu:latest   "/bin/bash"               2 minutes ago   Up 54 seconds             reactivated_container
+c9c6156cd851   nginx           "/docker-entrypoint.…"   2 hours ago     Up 2 hours      80/tcp    nginx_log_test
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE           COMMAND                   CREATED          STATUS                       PORTS     NAMES
+33aa810e2130   ubuntu:latest   "/bin/bash"               2 minutes ago    Up About a minute                      reactivated_container
+a09d25040952   ubuntu:latest   "cat /hello.txt"          4 minutes ago    Exited (1) 4 minutes ago               new_container
+b21f2bcc04b7   ubuntu:latest   "/bin/bash"               8 minutes ago    Exited (137) 4 minutes ago             my_container
+47590f1b8ceb   hello-world     "/hello"                  10 minutes ago   Exited (0) 10 minutes ago              test_hollo
+c9c6156cd851   nginx           "/docker-entrypoint.…"   2 hours ago      Up 2 hours                   80/tcp    nginx_log_test
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker stop reactivated_container nginx_log_test
+reactivated_container
+nginx_log_test
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE           COMMAND                   CREATED          STATUS                        PORTS     NAMES
+33aa810e2130   ubuntu:latest   "/bin/bash"               5 minutes ago    Exited (137) 18 seconds ago             reactivated_container
+a09d25040952   ubuntu:latest   "cat /hello.txt"          7 minutes ago    Exited (1) 7 minutes ago                new_container
+b21f2bcc04b7   ubuntu:latest   "/bin/bash"               11 minutes ago   Exited (137) 6 minutes ago              my_container
+47590f1b8ceb   hello-world     "/hello"                  12 minutes ago   Exited (0) 12 minutes ago               test_hollo
+c9c6156cd851   nginx           "/docker-entrypoint.…"   2 hours ago      Exited (0) 21 seconds ago               nginx_log_test
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker container prune
+WARNING! This will remove all stopped containers.
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+33aa810e2130f3d09afe7c88fbf1af48ac86bf7dc6603d94f762dbdccaaad8e3
+a09d25040952c23e597673eb6f91c9f641c775449b98a05f3e76a633c909e944
+b21f2bcc04b76d55f61b400319ded68740032ed2a967d2025fa7f72fea423ba3
+47590f1b8cebc663285562d9d6fad78304559e49cbbb50078a378ff49c46df3a
+c9c6156cd85102ba619faf835ecdd2cd5732345e8502707f2a39b64425bf2270
+
+Total reclaimed space: 110.6kB
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker images
+                                                                                                                                                                                                                                                          i Info →   U  In Use
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+hello-world:latest   c567b231f656       25.9kB         9.49kB
+my-web:1.0           e94718a13fd2       93.9MB         26.4MB
+nginx:alpine         713fc2ebfd92       94.5MB         27.3MB
+nginx:latest         165ddde8751e        243MB         66.8MB
+ubuntu:latest        6a06111c3b0a        163MB         45.9MB
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker image prune -a
+WARNING! This will remove all images without at least one container associated to them.
+Are you sure you want to continue? [y/N] y
+Deleted Images:
+untagged: my-web:1.0
+deleted: sha256:e94718a13fd2c5006efa000617e3e3737d120cd003e56a0019562bc9924464ec
+deleted: sha256:fc4127fbe650e17aa156d260b9264591cb084201b6b7c9364bc4778082d0a303
+deleted: sha256:eacdba4cf1d16d8355001288a6de97d1b75d4c7599f6aeacd1ad164f53e74147
+untagged: nginx:alpine
+deleted: sha256:34f345bd05eb2408a6ed75a9e09fa316fa8ead301d1ddf48c807c3d452a3637d
+untagged: nginx:latest
+deleted: sha256:165ddde8751e75a1c907d24ef10d9f6deb08b57e0fe56caf67512486aff76d82
+deleted: sha256:5cb45c65713151f856f6b64f6a9b6a96b74d6a10709a7aa18919a444fd00bffa
+deleted: sha256:3da6f2d7175b7c4bbb26e1e1922b47651b499e8a6f6493699a88dded7a16e5f1
+untagged: ubuntu:latest
+deleted: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
+deleted: sha256:157dc3d6e4a3e4f2c68d12df9df9ed6e808b59af6d4c3757b432b4f519916725
+deleted: sha256:278e4f3cf7eca2bbeeb54397b52f7db90183ec6441c8fdf75ff4a9a239f3edec
+untagged: hello-world:latest
+deleted: sha256:c567b231f65614688711a75f31518a064258a51d442117a3e771a3a8fdba78ef
+deleted: sha256:d1a8d0a4eeb63aff09f5f34d4d80505e0ba81905f36158cc3970d8e07179e59e
+deleted: sha256:8e752a1cddeafc02597e756f4a0ec96e29f63ac4bc4af87682daf3f1de843bb7
+
+Total reclaimed space: 474.5MB
+
+user@DESKTOP-KTF7H73 UCRT64 ~
+$ docker images
+                                                                                                                                                                                                                                                          i Info →   U  In Use
+IMAGE   ID             DISK USAGE   CONTENT SIZE   EXTRA
+
+```
+##### 스크린샷
+![docker ps && docker images](images/07_03_02_Docker_Images_Doker_ps.png)
+
+---
 ## 8. Dockerfile 커스텀 이미지
 > **실습 유형: 웹서버 기반 (Nginx)**
 >
@@ -1292,8 +1408,8 @@ $ docker build -t my-web:1.0 .
 User@4F-16 UCRT64 ~/practice
 $ docker rm -f my-web-8080
 my-web-8080
-
 ```
+##### 스크린샷
 ![Docker file](images/0901.png)
 ![09_8080p](images/09_8080p.png)
 
@@ -1443,6 +1559,383 @@ my-web-8080
 ![8080 Curl](images/10_8080curl.png)
 ![8080 Curl](images/09_8080p.png)
 
+
+### 9-4 포트 충돌시 대처방법
+#### 스탭1. 포트 충돌 상황 발생
+```bash
+# 1. 기존 컨테이너가 8080 포트를 먼저 점유
+docker run -d --name old-web -p 8080:80 nginx:alpine
+
+# 2. 동일 포트로 새 컨테이너 실행 시 충돌 에러 발생 확인 (증빙용 에러 로그)
+docker run -d --name new-web -p 8080:80 nginx:alpine
+```
+##### 스탭1의 실행결과
+```text
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -d --name old-web -p 8080:80 nginx:alpine
+Unable to find image 'nginx:alpine' locally
+alpine: Pulling from library/nginx
+Digest: sha256:713fc2ebfd92e8217db451477182ee91944b123d2b1ee9fd5a8c6e91ca6c3a11
+Status: Downloaded newer image for nginx:alpine
+1c9b686786b83d200cb4dbabb06a4cdaab8cf685bb6e6932c70aa66e24fb0baa
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker run -d --name new-web -p 8080:80 nginx:alpine
+75d9ba5e086fc55256128748864c8af40a5b8df63a66607bda44927237f3cdb0
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint new-web (2b5bb4b006ca91d24e0395fdc483cac80bc04d71a26d6ba615a64a9eeaf57a50): Bind for 0.0.0.0:8080 failed: port is already allocated
+
+```
+##### 스탭1의 스크린샷
+![포트충돌상황](images/09_04_01_port_pre-allocation.png)
+
+#### 스탭2. 포트 점유 프로세스 및 컨테이너 진단
+```bash
+# 3. OS 레벨에서 8080 포트 점유 PID 확인 (com.docker.backend.exe 확인)
+netstat -ano | grep :8080
+tasklist | grep <조회된_PID>
+
+# 4. Docker 레벨에서 8080 포트를 바인딩한 컨테이너 식별
+docker ps --filter "publish=8080"
+```
+#### 스탭2의 실행결과
+```text
+# OS 레벨에서 8080 포트 점유 PID 확인
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ netstat -ano | grep :8080
+  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       30660
+  TCP    127.0.0.1:8080         0.0.0.0:0              LISTENING       23884
+  TCP    [::]:8080              [::]:0                 LISTENING       30660
+  TCP    [::1]:8080             [::]:0                 LISTENING       23884
+
+
+# Docker 레벨에서 8080 포트를 바인딩한 컨테이너 식별
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps --filter "publish=8080"
+CONTAINER ID   IMAGE          COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+1c9b686786b8   nginx:alpine   "/docker-entrypoint.…"   12 minutes ago   Up 12 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   old-web
+
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker port old-web
+80/tcp -> 0.0.0.0:8080
+80/tcp -> [::]:8080
+
+# git bash의 자동 경로 확정에 따른 오류
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ tasklist.exe /FI "PID eq 30660"
+오류: 잘못된 인수/옵션 - 'C:/Program Files/Git/FI'.
+사용법을 보려면 "TASKLIST /?"를 입력하십시오.
+
+# Git Bash의 자동 경로 변환 방지
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ export MSYS_NO_PATHCONV=1
+
+# OS 레벨에서 8080 포트 점유 PID 확인
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ tasklist.exe /FI "PID eq 30660"
+
+이미지 이름                    PID 세션 이름              세션#  메모리 사용
+========================= ======== ================ =========== ============
+com.docker.backend.exe       30660 Console                    2    182,524 K
+
+# OS 레벨에서 8080 포트 점유 PID 확인
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ tasklist.exe /FI "PID eq 23884"
+
+이미지 이름                    PID 세션 이름              세션#  메모리 사용
+========================= ======== ================ =========== ============
+wslrelay.exe                 23884 Console                    2     11,996 K
+```
+##### 스탭2의 스크린샷
+![포트점유중인 PID체크](images/09_04_02_PID_check.png)
+
+```text
+Windows 호스트
+    │
+    ├── PID 30660: com.docker.backend.exe
+    │
+    └── PID 23884: wslrelay.exe
+             │
+             ▼
+       Docker 포트 게시
+       8080 → 80
+             │
+             ▼
+       old-web 컨테이너
+       nginx:alpine
+```
+
+```bash
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps -a --filter "name=^/new-web$"
+CONTAINER ID   IMAGE          COMMAND                   CREATED          STATUS    PORTS     NAMES
+75d9ba5e086f   nginx:alpine   "/docker-entrypoint.…"   51 minutes ago   Created             new-web
+```
+##### 충돌 상태 확인
+해석: 현재 new-web은 Created 상태.
+이는 Docker가 컨테이너 생성 단계까지 진행했지만, 8080 포트 게시에 실패하여 실행 상태인 Up으로 전환되지 못한 상황과 일치함.
+
+
+#### 스탭3. 컨테이너 중지(포트 해제) 및 신규 컨테이너 정상 기동
+```bash
+# 5. 기존 점유 컨테이너 중지 및 삭제
+docker stop old-web && docker rm old-web
+
+# 6. 포트 해제 확인
+netstat -ano | grep :8080
+```
+##### 스탭3의 실행결과
+```text
+#기존 점유 컨테이너 중지 및 삭제
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker stop old-web && docker rm old-web
+old-web
+old-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps --filter "publish=8080"
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+# 포트 해제 확인
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ netstat -ano | grep :8080
+```
+##### 스탭3의 스크린샷
+![포트점유중인 컨테이너 삭제](images/09_04_04_예전컨테이너 제거.png)
+> 포트를 점유 중이던 컨테이너가 삭제되고 port8080이 해제 되었음을 확인
+#### 스텝4 충돌시 생성된 컨데이너 재구동 
+```bash
+$ docker ps
+$ docker ps -a
+$ docker start new-web
+$ docker ps -a
+$ docker exec -it new-web sh
+쉘 내 구동 확인
+```
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$  docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                   CREATED        STATUS                        PORTS     NAMES
+75d9ba5e086f   nginx:alpine   "/docker-entrypoint.…"   21 hours ago   Exited (255) 44 seconds ago             new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker start new-web
+new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                   CREATED        STATUS          PORTS     NAMES
+75d9ba5e086f   nginx:alpine   "/docker-entrypoint.…"   21 hours ago   Up 33 seconds   80/tcp    new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker exec -it new-web sh
+/ # pwd
+/
+/ # nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+/ # ps
+PID   USER     TIME  COMMAND
+    1 root      0:00 nginx: master process nginx -g daemon off;
+   22 nginx     0:00 nginx: worker process
+   23 nginx     0:00 nginx: worker process
+   24 nginx     0:00 nginx: worker process
+   25 nginx     0:00 nginx: worker process
+   26 nginx     0:00 nginx: worker process
+   27 nginx     0:00 nginx: worker process
+   28 nginx     0:00 nginx: worker process
+   29 nginx     0:00 nginx: worker process
+   30 nginx     0:00 nginx: worker process
+   31 nginx     0:00 nginx: worker process
+   32 nginx     0:00 nginx: worker process
+   33 nginx     0:00 nginx: worker process
+   34 nginx     0:00 nginx: worker process
+   35 nginx     0:00 nginx: worker process
+   36 nginx     0:00 nginx: worker process
+   37 nginx     0:00 nginx: worker process
+   38 nginx     0:00 nginx: worker process
+   39 nginx     0:00 nginx: worker process
+   40 nginx     0:00 nginx: worker process
+   41 nginx     0:00 nginx: worker process
+   42 root      0:00 sh
+   49 root      0:00 ps
+/ # exit
+
+What's next:
+    Try Docker Debug for seamless, persistent debugging tools in any container or image → docker debug new-web
+    Learn more at https://docs.docker.com/go/debug-cli/
+```
+##### 스크린샷
+![컨테이너 재구동](images/09_04_05_충돌된 컨테이너 재구동 후 쉘구동 확인.png)
+
+> 재구동된 컨테이너로 내부 쉘을 열어서 config 파일 등이 정상적으로 생성되어있음을 확인.
+| 단계 | 컨테이너 상태 | 설명 |
+|---|---|---|
+| `docker run` 실행 전 | 없음 | 컨테이너가 생성되지 않은 상태 |
+| 포트 충돌 발생 | `Created` | 컨테이너는 생성되었으나 포트 게시 실패로 실행되지 못함 |
+| `docker start new-web` | `Running` | 기존에 생성된 컨테이너의 실행 성공 |
+| `docker exec new-web sh` | `Running` | 실행 중인 컨테이너 내부에 별도 프로세스로 셸 진입 |
+
+#### 스텝5 재구동한 컨테이너와 8080port 연결
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ curl -I http://localhost:8080
+curl: (7) Failed to connect to localhost:8080 after 1 ms: Could not connect to server
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker port new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice
+$ docker inspect new-web --format 'PortBindings={{json .HostConfig.PortBindings}}'
+PortBindings={"80/tcp":[{"HostIp":"","HostPort":"8080"}]}
+```
+##### 스크린샷
+![curl 8080 실패](images/09_04_06_충돌된 컨테이너 재구동 후 8080포트 연결안됨.png)
+
+| 항목 | 결과 | 의미 |
+|---|---|---|
+| `Configured` | 8080 설정 존재 | 컨테이너 생성 당시 포트 매핑을 요청함 |
+| `Active` | 빈 배열 (`[]`) | 실제 호스트 포트 연결이 활성화되지 않음 |
+| `docker port new-web` | 출력 없음 | 활성화된 포트 게시가 없음 |
+
+>##### Start로 재구동한 컨테이너는 생성당시 포트 매핑을 요청하였으나 당시 포트 선점유가 원인으로 실제 호스트 포트와 연결이 활성화 되지 않았을 가능성이 높고, 재구동된 컨테이너에는 활성화된 포트 게시가 없으므로 Start 재구동만으로는 8080포트와 연결이 불가능할 것으로 판단되어 포트 선점유가 없는 상태에서 docker run으로 컨테이너를 새로 생성하는 것이 타당하다고 판단함.
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker build -t my-web:1.0 .
+[+] Building 8.3s (9/9) FINISHED                                               docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                           0.6s
+ => => transferring dockerfile: 388B                                                           0.1s
+ => [internal] load metadata for docker.io/library/nginx:alpine                                0.9s
+ => [internal] load .dockerignore                                                              0.4s
+ => => transferring context: 2B                                                                0.0s
+ => [1/4] FROM docker.io/library/nginx:alpine@sha256:713fc2ebfd92e8217db451477182ee91944b123d  0.6s
+ => => resolve docker.io/library/nginx:alpine@sha256:713fc2ebfd92e8217db451477182ee91944b123d  0.5s
+ => [internal] load build context                                                              0.3s
+ => => transferring context: 62B                                                               0.0s
+ => CACHED [2/4] RUN apk add --no-cache curl                                                   0.0s
+ => CACHED [3/4] COPY nginx.conf /etc/nginx/nginx.conf                                         0.0s
+ => CACHED [4/4] COPY index.html /usr/share/nginx/html/index.html                              0.0s
+ => exporting to image                                                                         3.4s
+ => => exporting layers                                                                        0.0s
+ => => exporting manifest sha256:fc4127fbe650e17aa156d260b9264591cb084201b6b7c9364bc4778082d0  0.2s
+ => => exporting config sha256:4c744e5db1a2121153b6be3ba4bd000b8b383d30ea16ab23adaccd36a4474d  0.1s
+ => => exporting attestation manifest sha256:a44ff1a04b06abec08729bead70d807844b797e2d172c100  0.5s
+ => => exporting manifest list sha256:cbda215519c8a86e18fd5982bdb5ac319fa494f66c84b7bda3c8f6a  0.4s
+ => => naming to docker.io/library/my-web:1.0                                                  0.1s
+ => => unpacking to docker.io/library/my-web:1.0                                               1.6s
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker images my-web:1.0
+                                                                               i Info →   U  In Use
+IMAGE        ID             DISK USAGE   CONTENT SIZE   EXTRA
+my-web:1.0   cbda215519c8       93.9MB         26.4MB
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker rm -f new-web
+new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker run -d --name new-web -p 8080:80 my-web:1.0
+36236409ecab2004f560b4634c6775358c1657c6dc0dcb296bbea8ede941d2d5
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker ps --filter "publish=8080"
+CONTAINER ID   IMAGE        COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+36236409ecab   my-web:1.0   "/docker-entrypoint.…"   24 seconds ago   Up 22 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   new-web
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ docker port new-web
+80/tcp -> 0.0.0.0:8080
+80/tcp -> [::]:8080
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ curl -I http://localhost:8080
+HTTP/1.1 200 OK
+Server: nginx/1.31.8
+Date: Sun, 08 Nov 2026 05:35:26 GMT
+Content-Type: text/html
+Content-Length: 1659
+Last-Modified: Fri, 06 Nov 2026 23:15:22 GMT
+Connection: keep-alive
+ETag: "6aee5f8a-67b"
+Accept-Ranges: bytes
+
+
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ curl http://localhost:8080
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Custom Nginx</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 장**의 커스텀 Nginx 서버에 오신 것을 환영합니다.</h1>
+        <p>이것은 Docker로 빌드된 커스텀 nginx 컨테이너입니다.</p>
+        <p>서버가 컨테이너 내부에서 성공적으로 실행 중입니다.</p>
+
+        <div class="info">
+            <strong>Server Information:</strong><br>
+            Image: my-web:1.0<br>
+            Base: nginx:alpine<br>
+            Status: ✅ Running
+        </div>
+    </div>
+</body>
+</html>
+```
+##### 스크린샷
+![새컨테이너 8080p](images/09_04_07_새컨테이너로8080포트접속.png)
+
+
+```bash
+
+# (테스트 완료 후 정리)
+docker stop new-web && docker rm new-web
+```
 ---
 ## 10. 바인드 마운트 반영
 
@@ -1635,15 +2128,11 @@ persist me
 ---
 
 ## 12. Git설정 및 GitHub연동
+### 12-1 Git 사용자 설정
 ```bash
 $ git config --global user.name "본인이름"
 $ git config --global user.email "abc@example.com"   # 공개 저장소면 마스킹 권장
 $ git config --list
-
-$ git remote add origin https://github.com/<user>/<repo>.git
-$ git add -u
-$ git commit -m "feat:  과제수행 "
-$ git push -u origin main
 ```
 ```text
 
@@ -1661,7 +2150,7 @@ filter.lfs.smudge=git-lfs smudge -- %f
 filter.lfs.process=git-lfs filter-process
 filter.lfs.required=true
 http.sslbackend=schannel
-core.autocrlf=true~~~~~~
+core.autocrlf=true
 core.fscache=true
 core.symlinks=false
 pull.rebase=false
@@ -1670,7 +2159,16 @@ credential.https://dev.azure.com.usehttppath=true
 init.defaultbranch=master
 user.email=a**@e******.com
 user.name=Se**** J***
+```
+### 12-2 원격 저장소 연결 확인 (git remote add origin, git remote -v)
+```bash
+$ git remote add origin https://github.com/<user>/<repo>.git
+$ git add -u
+$ git commit -m "feat:  과제수행 "
+$ git push -u origin main
+```
 
+```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git remote add origin https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
 
@@ -1704,7 +2202,7 @@ $ git commit -m "미션 1-1 과제수행"
 ```
 
 > push 성공 로그 첨부
-##### push 성공 로그
+##### push 성공 로그 (git push)
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git push -u origin main
@@ -1719,9 +2217,35 @@ To https://github.com/L011235/Mission-1-1-Codyssey-all-in-one
    2e95954..805a1a8  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+##### push 성공 로그 (git log)
+```text
+user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
+$ git log -20 --oneline
+bc54c7b (HEAD -> main, origin/main) 개인정보 보호/재현성 등
+2ff2075 개인정보 보호/재현성 등
+662c25f 개인정보 보호/재현성 등
+57893e1 개인정보 보호/재현성 등
+b8d6c79 번호조정
+0d5b854 트러블 슈팅
+7bb0d60 트러블 슈팅
+b0d4eb0 번호조정
+48b27da 번호조정
+e2c802f 8080포트 관련 업데이트
+aac12c5 8080포트 관련 업데이트
+d68a96d 8080포트 관련 업데이트
+d1fa313 8080포트 관련 업데이트
+fb191d8 8080포트 관련 업데이트
+b8857d8 7-2-4이미지의 불변성 업데이트
+46e640d docker run -it와 docker exec -it의 차이
+8b00b3d Docker파일관련 업데이트
+97602d3 Docker파일관련 업데이트
+f5c4c2e Docker파일관련 업데이트
+28d8d67 바인드 마운트 관련  업데이트
+
+```
 ##### 스크린샷
 ![GitHub Vs Code 연동](images/13_01_github_vs_code_connection.png)
-
+![Git log](images/12_02_git_log.png)
 ---
 
 ## 13. 트러블슈팅
@@ -1821,6 +2345,17 @@ $ docker exec -it new_container cat /again.txt
 hello again
 ```
 ---
+### 사례 3. 포트 충돌 진단
+#### 1. 포트 점유 프로세스 및 컨테이너 진단 결과
+
+| 확인 항목 | 실제 결과 | 의미 |
+|---|---|---|
+| Docker 컨테이너 | `old-web` 실행 중 | 호스트 8080 포트 점유 |
+| 컨테이너 포트 연결 | `80 → 8080` | 호스트 8080을 컨테이너 80에 연결 |
+| PID 30660 | `com.docker.backend.exe` | Docker Desktop 백엔드 프로세스 |
+| PID 23884 | `wslrelay.exe` | WSL 네트워크 릴레이 프로세스 |
+
+**진단 결과:** Docker 명령으로 `old-web`이 8080 포트를 게시하고 있음을 확인했으며, Windows의 `netstat` 및 `tasklist`로 관련 프로세스도 확인하였다.
 
 ## 14. 재현 환경 및 실행 시 주의사항
 
@@ -1836,6 +2371,9 @@ hello again
 
 각 실습의 구체적인 실행 순서와 결과는 해당 절의 명령어 및 실행 로그를 기준으로 재현할 수 있다.
 
+- Windows Git Bash: 바인드 마운트 호스트 경로에 `$(pwd -W)` 사용
+- Git Bash의 Linux 경로 인자: 필요한 경우 `MSYS_NO_PATHCONV=1` 설정
+- Linux/WSL 터미널: 일반적으로 호스트 경로에 `$(pwd)` 사용
 ---
 
 ## 15. 보안 및 개인정보 보호
