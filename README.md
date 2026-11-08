@@ -2227,7 +2227,15 @@ branch 'main' set up to track 'origin/main'.
 ```text
 user@DESKTOP-KTF7H73 UCRT64 ~/practice/Mission-1-1-Codyssey-all-in-one (main)
 $ git log -20 --oneline
-bc54c7b (HEAD -> main, origin/main) 개인정보 보호/재현성 등
+36a571a (HEAD -> main, origin/main) 중복파일 삭제
+2d565b0 9-4 포트충돌 관련 업데이트
+5db1924 9-4 포트충돌 관련 업데이트
+80bc384 표 수정
+8bae300 목차수정
+42963e5 목차수정
+f06e2a9 한글파일명을 영문으로
+36c25c0 포트 충돌 업데이트
+bc54c7b 개인정보 보호/재현성 등
 2ff2075 개인정보 보호/재현성 등
 662c25f 개인정보 보호/재현성 등
 57893e1 개인정보 보호/재현성 등
@@ -2239,18 +2247,10 @@ b0d4eb0 번호조정
 e2c802f 8080포트 관련 업데이트
 aac12c5 8080포트 관련 업데이트
 d68a96d 8080포트 관련 업데이트
-d1fa313 8080포트 관련 업데이트
-fb191d8 8080포트 관련 업데이트
-b8857d8 7-2-4이미지의 불변성 업데이트
-46e640d docker run -it와 docker exec -it의 차이
-8b00b3d Docker파일관련 업데이트
-97602d3 Docker파일관련 업데이트
-f5c4c2e Docker파일관련 업데이트
-28d8d67 바인드 마운트 관련  업데이트
-
 ```
 ##### 스크린샷
 ![Git log](images/12_02_git_log.png)
+##### ※ 위 Git 로그는 README에 기록을 반영하기 직전 시점의 출력이다. 이후 README 수정 커밋이 추가되므로 현재 최종 HEAD와는 차이가 있을 수 있다.
 ---
 
 ## 13. 트러블슈팅
@@ -2302,7 +2302,7 @@ cat: 'C:/Program Files/Git/hello.txt': No such file or directory
 #### 스크린샷 (오류재현)
 ![오류재현](images/13_trubleshooting_01_01_error.png)
 
-> 컨테이너 내부 경로 /hello.txt가 Docker에 전달되기 전에 Git Bash의 MSYS 경로 자동 변환 기능에 의해 Windows 경로(c:/Program Files/Git/hell.txt)로 변경된 것입니다.
+> 컨테이너 내부 경로 /hello.txt가 Docker에 전달되기 전에 Git Bash의 MSYS 경로 자동 변환 기능에 의해 Windows 경로(c:/Program Files/Git/hello.txt)로 변경된 것입니다.
 
 #### 1-2. 해결 방법 적용
 ```bash
@@ -2340,7 +2340,7 @@ bash: /again.txt: Permission denied
 ```
 ##### 스크린샷
 ![오류재현](images/13_trubleshooting_02_01_error.png)
-> docker exec` 명령에 포함된 `>` 리다이렉션은 Docker가 아니라 호스트 Git Bash에서 처리된다. 따라서 컨테이너 내부의 `/again.txt`에 쓰는 것이 아니라 호스트 경로에 파일을 쓰려고 시도한 것이다.
+> `docker exec` 명령에 포함된 `>` 리다이렉션은 Docker가 아니라 호스트 Git Bash에서 처리된다. 따라서 컨테이너 내부의 `/again.txt`에 쓰는 것이 아니라 호스트 경로에 파일을 쓰려고 시도한 것이다.
 
 ### 2-2. 원인 확인
 
