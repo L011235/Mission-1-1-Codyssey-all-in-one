@@ -2259,15 +2259,15 @@ f5c4c2e Docker파일관련 업데이트
 ### 사례 1. Git Bash의 경로 자동 변환으로 컨테이너 파일 접근 실패
 #### 1-1. 문제 재현 및 오류 확인
 컨테이너 내부에 파일을 생성합니다.
-docker run -dit --name path-test ubuntu
+docker run -dit --name path_test ubuntu
 
-docker exec -it path-test bash
+docker exec -it path_test bash
 echo "Hello Docker" > /hello.txt
 cat /hello.txt
 exit
 
 이후 Git Bash에서 다음 명령을 실행합니다.
-docker exec -it path-test cat /hello.txt
+docker exec -it path_test cat /hello.txt
 
 기존 실습에서는 다음 오류가 발생했습니다.
 cat: 'C:/Program Files/Git/hello.txt': No such file or directory
@@ -2308,7 +2308,7 @@ cat: 'C:/Program Files/Git/hello.txt': No such file or directory
 ```bash
 export MSYS_NO_PATHCONV=1
 
-docker exec -it path-test cat /hello.txt
+docker exec -it path_test cat /hello.txt
 ```
 #### 실행결과 (해결)
 ```text
@@ -2340,7 +2340,8 @@ bash: /again.txt: Permission denied
 ```
 ##### 스크린샷
 ![오류재현](images/13_trubleshooting_02_01_error.png)
-> `docker exe 리다이렉션은 docker exec가 아니라 호스트 Git Bash에서 처리된다. 따라서 컨테이너 내부의 /again.txt에 쓰는 것이 아니라 호스트 경로에 파일을 쓰려고 시도한 것임.
+> docker exec` 명령에 포함된 `>` 리다이렉션은 Docker가 아니라 호스트 Git Bash에서 처리된다. 따라서 컨테이너 내부의 `/again.txt`에 쓰는 것이 아니라 호스트 경로에 파일을 쓰려고 시도한 것이다.
+
 ### 2-2. 원인 확인
 
 리다이렉션이 어디에서 해석되는지 비교하면 다음과 같다.
@@ -2627,10 +2628,10 @@ Docker 명령과 Windows의 netstat, tasklist를 함께 사용하여 포트 점�
 
 ## 15. 보안 및 개인정보 보호
 - 제출물 전체에서 다음을 **마스킹**했음을 확인한다.
-  - [ ] GitHub 토큰 / Personal Access Token → `ghp_****`
-  - [ ] 이메일 → `me@****.com` (필요 시)
-  - [ ] 비밀번호 / 인증코드 → `******`
-  - [ ] 기타 민감정보 (주민등록번호 등은 애초에 포함하지 않음)
+  - [x] GitHub 토큰 / Personal Access Token → `ghp_****`
+  - [x] 이메일 → `me@****.com` (필요 시)
+  - [x] 비밀번호 / 인증코드 → `******` (비번 인증코드 없음)
+  - [x] 기타 민감정보 (주민등록번호 등은 애초에 포함하지 않음)
 - 커밋 히스토리에도 토큰이 남지 않았는지 확인한다.
 
 ```bash
